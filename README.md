@@ -1,5 +1,19 @@
 # Old School Shuffle
 
+Minimal Ruby app scaffold for running Old School Shuffle in Docker.
+
+## Requirements
+- Docker + Docker Compose
+
+## Environment setup
+1. Copy the example env file:
+   ```bash
+   cp .env.example .env
+   ```
+2. Set `APP_SESSION_SECRET` to a long random value.
+3. Fill in `DATABASE_URL` and Spotify OAuth credentials.
+
+## Run locally with Docker
 Old School Shuffle is now scaffolded as a minimal Next.js starter with TypeScript,
 App Router, and a production-oriented Docker setup.
 
@@ -60,6 +74,7 @@ To build and run the production container locally:
 docker compose up --build
 ```
 
+The app is available at `http://localhost:3001` and health checks at `http://localhost:3001/health`.
 The app will be available at [http://localhost:3000](http://localhost:3000).
 Running through Docker is the easiest option if your local Node version is older.
 

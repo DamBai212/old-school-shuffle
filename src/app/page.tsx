@@ -1,7 +1,6 @@
-import {
-  ShufflePlaylist,
-  type PlaylistTrack
-} from "@/components/shuffle-playlist";
+import Link from "next/link";
+import { getAllPosts } from "@/content/posts";
+import { ShufflePlaylist, type PlaylistTrack } from "@/components/shuffle-playlist";
 
 const sceneTags = [
   "Basement house",
@@ -63,37 +62,6 @@ const playlistTracks: readonly PlaylistTrack[] = [
   }
 ] as const;
 
-const latestPosts = [
-  {
-    category: "Scene report",
-    title: "Why the best 2AM records sound like they were found in the dark.",
-    excerpt:
-      "The tension lives in the negative space: the clipped vocal, the delayed snare, the bassline you feel before you place it.",
-    meta: "7 min read"
-  },
-  {
-    category: "Floor notes",
-    title: "Basement sets are getting murkier, slower, and better because of it.",
-    excerpt:
-      "A dispatch from rooms that trust tension more than volume, and let atmosphere do half the work.",
-    meta: "London 01:40"
-  },
-  {
-    category: "Booth notes",
-    title: "Five tracks that let a shuffled set still feel like one long inhale.",
-    excerpt:
-      "Bridge cuts, pressure builders, and small left turns that keep the room curious instead of confused.",
-    meta: "Selectors' picks"
-  },
-  {
-    category: "After-hours essay",
-    title: "How to write about the club without flattening it into lifestyle wallpaper.",
-    excerpt:
-      "Write about sweat, pacing, light, release, and bodies moving together. The technology is only half the story.",
-    meta: "Filed at 3:12 AM"
-  }
-] as const;
-
 const editorNotes = [
   "A great club page should feel like a flyer, a booth monitor, and a late-night diary at the same time.",
   "Shuffle works when every track still shares the same darkness level, even if the order breaks the rules.",
@@ -101,6 +69,9 @@ const editorNotes = [
 ] as const;
 
 export default function HomePage() {
+  const posts = getAllPosts();
+  const featuredPost = posts[0]!;
+  const latestPosts = posts.slice(1, 5);
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? "Old School Shuffle";
   const tagline =
     process.env.NEXT_PUBLIC_TAGLINE ??
@@ -135,28 +106,34 @@ export default function HomePage() {
       <section className="lead-grid fade-up">
         <article className="paper-card featured-story">
           <div className="story-badges">
-            <span className="story-badge">Night issue</span>
-            <span className="story-issue">After-hours 04</span>
+            <span className="story-badge">{featuredPost.issue}</span>
+            <span className="story-issue">{featuredPost.category}</span>
           </div>
 
           <p className="section-kicker">Cover story</p>
-          <h1>From the blog to the booth, the page should feel like 2AM.</h1>
-          <p className="story-dek">{tagline}</p>
+          <h1>{featuredPost.title}</h1>
+          <p className="story-dek">{featuredPost.deck ?? tagline}</p>
 
           <p className="story-meta">
-            By Mara Ellis
+            By {featuredPost.author}
             <span aria-hidden="true"> / </span>
-            Filed from the basement
+            {featuredPost.dateline}
             <span aria-hidden="true"> / </span>
-            2:13 AM
+            {featuredPost.readLabel}
           </p>
 
           <div className="tag-row" aria-label="Music tags">
-            {sceneTags.map((tag) => (
+            {featuredPost.tags.map((tag) => (
               <span className="tag-chip" key={tag}>
                 {tag}
               </span>
             ))}
+          </div>
+
+          <div className="story-link-row">
+            <Link className="story-link" href={`/posts/${featuredPost.slug}`}>
+              Read cover story
+            </Link>
           </div>
         </article>
 
@@ -183,10 +160,12 @@ export default function HomePage() {
           <div className="post-grid">
             {latestPosts.map((post) => (
               <article className="post-card" key={post.title}>
-                <p className="post-topline">{post.category}</p>
-                <h3>{post.title}</h3>
-                <p className="post-excerpt">{post.excerpt}</p>
-                <p className="post-footer">{post.meta}</p>
+                <Link className="post-card-link" href={`/posts/${post.slug}`}>
+                  <p className="post-topline">{post.category}</p>
+                  <h3>{post.title}</h3>
+                  <p className="post-excerpt">{post.excerpt}</p>
+                  <p className="post-footer">{post.cardLabel}</p>
+                </Link>
               </article>
             ))}
           </div>

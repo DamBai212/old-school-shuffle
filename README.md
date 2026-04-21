@@ -63,8 +63,20 @@ Docker image uses. An `.nvmrc` file is included if you use `nvm`.
 
 - `npm run dev` starts the local development server
 - `npm run build` creates the production build
+- `npm run lint` runs ESLint across the project
+- `npm run lint:fix` runs ESLint and applies safe auto-fixes where possible
 - `npm run start` runs the production server
 - `npm run typecheck` runs the TypeScript compiler without emitting files
+
+## Continuous Integration
+
+GitHub Actions now runs a CI workflow on all pushes and pull requests. The
+workflow uses Node 20 and runs:
+
+- `npm ci`
+- `npm run lint`
+- `npm run typecheck`
+- `npm run build`
 
 ## Docker
 
@@ -108,5 +120,5 @@ Copy `.env.local.example` to `.env.local` and adjust values as needed.
 
 - add more routes or feature sections
 - connect the UI to a real data source or API
-- add linting, tests, and CI
+- add tests now that linting and CI are in place
 - decide whether this remains a single app or grows into a multi-service project

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllPosts, getPostBySlug } from "@/content/posts";
+import { getAdjacentPosts, getAllPosts, getPostBySlug } from "@/content/posts";
 
 type PostPageProps = {
   params: {
@@ -37,6 +37,7 @@ export default function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
+  const { previousPost, nextPost } = getAdjacentPosts(post.slug);
   const relatedPosts = getAllPosts()
     .filter((candidate) => candidate.slug !== post.slug)
     .slice(0, 2);
@@ -53,15 +54,15 @@ export default function PostPage({ params }: PostPageProps) {
 
         <nav aria-label="Primary" className="top-nav">
           <Link href="/">Front page</Link>
-          <Link href="/#latest">Latest</Link>
+          <Link href="/posts">Archive</Link>
           <Link href="/#playlist">Playlist</Link>
         </nav>
       </header>
 
       <article className="article-layout fade-up">
         <div className="paper-card article-main">
-          <Link className="article-back" href="/">
-            Back to the front page
+          <Link className="article-back" href="/posts">
+            Back to the archive
           </Link>
 
           <div className="story-badges">
@@ -102,6 +103,32 @@ export default function PostPage({ params }: PostPageProps) {
               </section>
             ))}
           </div>
+
+          <section className="article-pager" aria-label="Adjacent posts">
+            {previousPost ? (
+              <Link className="article-nav-card" href={`/posts/${previousPost.slug}`}>
+                <span>Previous post</span>
+                <strong>{previousPost.title}</strong>
+              </Link>
+            ) : (
+              <div className="article-nav-card article-nav-card-muted">
+                <span>Previous post</span>
+                <strong>You&apos;re at the first issue in this sequence.</strong>
+              </div>
+            )}
+
+            {nextPost ? (
+              <Link className="article-nav-card" href={`/posts/${nextPost.slug}`}>
+                <span>Next post</span>
+                <strong>{nextPost.title}</strong>
+              </Link>
+            ) : (
+              <div className="article-nav-card article-nav-card-muted">
+                <span>Next post</span>
+                <strong>You&apos;ve reached the latest issue in this sequence.</strong>
+              </div>
+            )}
+          </section>
         </div>
 
         <aside className="article-sidebar">
@@ -124,7 +151,7 @@ export default function PostPage({ params }: PostPageProps) {
           </section>
 
           <section className="sidebar-card">
-            <p className="section-kicker">Next in the queue</p>
+            <p className="section-kicker">Elsewhere in the archive</p>
 
             <div className="article-link-list">
               {relatedPosts.map((relatedPost) => (
@@ -137,6 +164,12 @@ export default function PostPage({ params }: PostPageProps) {
                   <strong>{relatedPost.title}</strong>
                 </Link>
               ))}
+            </div>
+
+            <div className="story-link-row">
+              <Link className="story-link" href="/posts">
+                Browse full archive
+              </Link>
             </div>
           </section>
         </aside>

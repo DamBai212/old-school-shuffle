@@ -90,7 +90,7 @@ export default function HomePage() {
         <nav aria-label="Primary" className="top-nav">
           <a href="#latest">Latest</a>
           <a href="#playlist">Playlist</a>
-          <a href="#notes">Notes</a>
+          <Link href="/posts">Archive</Link>
         </nav>
       </header>
 
@@ -168,6 +168,12 @@ export default function HomePage() {
                 </Link>
               </article>
             ))}
+          </div>
+
+          <div className="latest-footer">
+            <Link className="story-link" href="/posts">
+              Browse full archive
+            </Link>
           </div>
         </section>
 

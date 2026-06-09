@@ -238,3 +238,30 @@ export function getAllPosts() {
 export function getPostBySlug(slug: string) {
   return posts.find((post) => post.slug === slug);
 }
+
+export function getAdjacentPosts(slug: string) {
+  const currentIndex = posts.findIndex((post) => post.slug === slug);
+
+  if (currentIndex === -1) {
+    return {
+      previousPost: undefined,
+      nextPost: undefined
+    };
+  }
+
+  return {
+    previousPost: posts[currentIndex - 1],
+    nextPost: posts[currentIndex + 1]
+  };
+}
+
+export function getPostsByCategory() {
+  return posts.reduce<Record<string, Post[]>>((groups, post) => {
+    if (!groups[post.category]) {
+      groups[post.category] = [];
+    }
+
+    groups[post.category]!.push(post);
+    return groups;
+  }, {});
+}

@@ -26,7 +26,7 @@ export default function PostsArchivePage() {
 
         <nav aria-label="Primary" className="top-nav">
           <Link href="/">Front page</Link>
-          <Link href="/#playlist">Playlist</Link>
+          <Link href="/playlist">Playlist</Link>
           <Link href="/posts">Archive</Link>
         </nav>
       </header>
@@ -83,6 +83,12 @@ export default function PostsArchivePage() {
             Each category is its own lane through the archive: floor reports,
             scene notes, booth strategy, and essays filed after the room emptied.
           </p>
+
+          <div className="story-link-row">
+            <Link className="story-link" href="/playlist">
+              Pair it with the playlist
+            </Link>
+          </div>
         </aside>
       </section>
 

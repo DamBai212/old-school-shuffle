@@ -6,7 +6,8 @@ const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? "Old School Shuffle";
 
 export const metadata: Metadata = {
   title: siteName,
-  description: "A retro-inspired Next.js starter with TypeScript and Docker."
+  description:
+    "Independent after-hours dispatches, floor reports, and a shuffle-led club playlist built with Next.js."
 };
 
 type RootLayoutProps = {

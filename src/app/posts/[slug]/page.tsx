@@ -55,7 +55,7 @@ export default function PostPage({ params }: PostPageProps) {
         <nav aria-label="Primary" className="top-nav">
           <Link href="/">Front page</Link>
           <Link href="/posts">Archive</Link>
-          <Link href="/#playlist">Playlist</Link>
+          <Link href="/playlist">Playlist</Link>
         </nav>
       </header>
 
@@ -137,6 +137,12 @@ export default function PostPage({ params }: PostPageProps) {
             <h2>{post.trackCue.title}</h2>
             <p className="playlist-artist">{post.trackCue.artist}</p>
             <p className="article-sidecopy">{post.trackCue.note}</p>
+
+            <div className="story-link-row">
+              <Link className="story-link" href="/playlist">
+                Hear the full queue
+              </Link>
+            </div>
           </section>
 
           <section className="sidebar-card dark-card">

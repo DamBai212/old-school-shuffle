@@ -1,14 +1,7 @@
 import Link from "next/link";
-import { getAllPosts } from "@/content/posts";
+import { getAllPosts, getCategoryHref, getTagHref } from "@/content/posts";
 import { getPlaylistTracks } from "@/content/playlist";
 import { ShufflePlaylist } from "@/components/shuffle-playlist";
-
-const sceneTags = [
-  "Basement house",
-  "Neon dub",
-  "Peak-time pressure",
-  "After-hours soul"
-] as const;
 
 const pulseItems = [
   {
@@ -71,7 +64,9 @@ export default function HomePage() {
         <article className="paper-card featured-story">
           <div className="story-badges">
             <span className="story-badge">{featuredPost.issue}</span>
-            <span className="story-issue">{featuredPost.category}</span>
+            <Link className="story-issue" href={getCategoryHref(featuredPost.category)}>
+              {featuredPost.category}
+            </Link>
           </div>
 
           <p className="section-kicker">Cover story</p>
@@ -88,9 +83,9 @@ export default function HomePage() {
 
           <div className="tag-row" aria-label="Music tags">
             {featuredPost.tags.map((tag) => (
-              <span className="tag-chip" key={tag}>
+              <Link className="tag-chip" href={getTagHref(tag)} key={tag}>
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
 
@@ -130,8 +125,11 @@ export default function HomePage() {
           <div className="post-grid">
             {latestPosts.map((post) => (
               <article className="post-card" key={post.title}>
+                <Link className="post-topline post-topline-link" href={getCategoryHref(post.category)}>
+                  {post.category}
+                </Link>
+
                 <Link className="post-card-link" href={`/posts/${post.slug}`}>
-                  <p className="post-topline">{post.category}</p>
                   <h3>{post.title}</h3>
                   <p className="post-excerpt">{post.excerpt}</p>
                   <p className="post-footer">{post.cardLabel}</p>

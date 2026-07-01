@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getAllPosts, getPostsByCategory } from "@/content/posts";
+import { getAllPosts, getCategories, getCategoryHref } from "@/content/posts";
+import { ArchiveExplorer } from "@/components/archive-explorer";
 
 export const metadata: Metadata = {
   title: "Archive | Old School Shuffle",
@@ -11,8 +12,7 @@ export const metadata: Metadata = {
 export default function PostsArchivePage() {
   const posts = getAllPosts();
   const featuredPost = posts[0]!;
-  const categoryGroups = getPostsByCategory();
-  const categories = Object.entries(categoryGroups);
+  const categories = getCategories();
 
   return (
     <main className="blog-shell archive-shell">
@@ -42,10 +42,10 @@ export default function PostsArchivePage() {
         </div>
 
         <div className="archive-chip-row" aria-label="Archive categories">
-          {categories.map(([category]) => (
-            <a className="tag-chip" href={`#${category.toLowerCase().replaceAll(" ", "-")}`} key={category}>
-              {category}
-            </a>
+          {categories.map((category) => (
+            <Link className="tag-chip" href={getCategoryHref(category.title)} key={category.slug}>
+              {category.title}
+            </Link>
           ))}
         </div>
       </section>
@@ -54,7 +54,9 @@ export default function PostsArchivePage() {
         <article className="paper-card archive-feature">
           <div className="story-badges">
             <span className="story-badge">{featuredPost.issue}</span>
-            <span className="story-issue">{featuredPost.category}</span>
+            <Link className="story-issue" href={getCategoryHref(featuredPost.category)}>
+              {featuredPost.category}
+            </Link>
           </div>
 
           <p className="section-kicker">Latest issue</p>
@@ -92,50 +94,7 @@ export default function PostsArchivePage() {
         </aside>
       </section>
 
-      <section className="archive-grid fade-up">
-        {posts.map((post) => (
-          <article className="post-card archive-card" key={post.slug}>
-            <Link className="post-card-link" href={`/posts/${post.slug}`}>
-              <p className="post-topline">{post.category}</p>
-              <h3>{post.title}</h3>
-              <p className="post-excerpt">{post.excerpt}</p>
-              <p className="post-footer">
-                {post.cardLabel}
-                <span aria-hidden="true"> / </span>
-                {post.readLabel}
-              </p>
-            </Link>
-          </article>
-        ))}
-      </section>
-
-      <section className="archive-groups fade-up">
-        {categories.map(([category, categoryPosts]) => (
-          <section
-            className="archive-group"
-            id={category.toLowerCase().replaceAll(" ", "-")}
-            key={category}
-          >
-            <div className="section-heading">
-              <p className="section-kicker">Category</p>
-              <h2>{category}</h2>
-            </div>
-
-            <div className="archive-group-list">
-              {categoryPosts.map((post) => (
-                <Link className="archive-line" href={`/posts/${post.slug}`} key={post.slug}>
-                  <div className="archive-line-copy">
-                    <strong>{post.title}</strong>
-                    <p>{post.excerpt}</p>
-                  </div>
-
-                  <span>{post.readLabel}</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        ))}
-      </section>
+      <ArchiveExplorer posts={posts} />
     </main>
   );
 }

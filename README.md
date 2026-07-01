@@ -7,8 +7,10 @@ dedicated shuffle playlist page that feels like part magazine and part booth mon
 ## What It Includes
 
 - Nightlife-inspired homepage with a reshuffling playlist and editorial modules
-- Archive page for browsing every post in one place
+- Archive page with shareable lane, signal, and search filters
 - Dynamic post pages under `/posts/[slug]`
+- Archive lane pages under `/posts/category/[slug]`
+- Topic signal pages under `/posts/tag/[slug]`
 - Dedicated playlist route at `/playlist`
 - Strict TypeScript, ESLint, and GitHub Actions CI
 - Docker setup for running the app in a container
@@ -66,7 +68,9 @@ Copy `.env.local.example` to `.env.local` and adjust values as needed.
 ## Routes
 
 - `/` for the homepage and featured shuffle module
-- `/posts` for the archive
+- `/posts` for the archive explorer with query-param filters
+- `/posts/category/[slug]` for archive lanes by category
+- `/posts/tag/[slug]` for archive topics by tag
 - `/posts/[slug]` for individual stories
 - `/playlist` for the full booth queue
 
@@ -116,8 +120,11 @@ The app is exposed on `http://localhost:3001`.
     |   |-- playlist/page.tsx
     |   `-- posts/
     |       |-- [slug]/page.tsx
-    |       `-- page.tsx
+    |       |-- category/[slug]/page.tsx
+    |       |-- page.tsx
+    |       `-- tag/[slug]/page.tsx
     |-- components/
+    |   |-- archive-explorer.tsx
     |   `-- shuffle-playlist.tsx
     `-- content/
         |-- playlist.ts
@@ -128,5 +135,5 @@ The app is exposed on `http://localhost:3001`.
 
 - connect the editorial content to a CMS or content collection workflow
 - add tests around route rendering and content helpers
-- expand the archive with more posts, filters, or issue-based navigation
+- expand the archive with more posts, multi-select filters, or issue-based navigation
 - add richer media treatments such as audio embeds or artist spotlights

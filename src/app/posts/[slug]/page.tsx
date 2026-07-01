@@ -1,7 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAdjacentPosts, getAllPosts, getPostBySlug } from "@/content/posts";
+import {
+  getAdjacentPosts,
+  getAllPosts,
+  getCategoryHref,
+  getPostBySlug,
+  getRelatedPosts,
+  getTagHref
+} from "@/content/posts";
 
 type PostPageProps = {
   params: {
@@ -38,9 +45,8 @@ export default function PostPage({ params }: PostPageProps) {
   }
 
   const { previousPost, nextPost } = getAdjacentPosts(post.slug);
-  const relatedPosts = getAllPosts()
-    .filter((candidate) => candidate.slug !== post.slug)
-    .slice(0, 2);
+  const categoryHref = getCategoryHref(post.category);
+  const relatedPosts = getRelatedPosts(post.slug, 3);
 
   return (
     <main className="blog-shell article-shell">
@@ -67,7 +73,9 @@ export default function PostPage({ params }: PostPageProps) {
 
           <div className="story-badges">
             <span className="story-badge">{post.issue}</span>
-            <span className="story-issue">{post.category}</span>
+            <Link className="story-issue" href={categoryHref}>
+              {post.category}
+            </Link>
           </div>
 
           <p className="section-kicker">{post.category}</p>
@@ -84,9 +92,9 @@ export default function PostPage({ params }: PostPageProps) {
 
           <div className="tag-row" aria-label="Post tags">
             {post.tags.map((tag) => (
-              <span className="tag-chip" key={tag}>
+              <Link className="tag-chip" href={getTagHref(tag)} key={tag}>
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
 
@@ -154,20 +162,37 @@ export default function PostPage({ params }: PostPageProps) {
               <li>{post.issue}</li>
               <li>{post.category}</li>
             </ul>
+
+            <div className="story-link-row">
+              <Link className="story-link" href={categoryHref}>
+                Explore this lane
+              </Link>
+            </div>
           </section>
 
           <section className="sidebar-card">
-            <p className="section-kicker">Elsewhere in the archive</p>
+            <p className="section-kicker">Continue the signal</p>
 
             <div className="article-link-list">
+              <Link className="article-link-card" href={categoryHref}>
+                <span>Archive lane</span>
+                <strong>{post.category}</strong>
+              </Link>
+
               {relatedPosts.map((relatedPost) => (
                 <Link
                   className="article-link-card"
-                  href={`/posts/${relatedPost.slug}`}
-                  key={relatedPost.slug}
+                  href={`/posts/${relatedPost.post.slug}`}
+                  key={relatedPost.post.slug}
                 >
-                  <span>{relatedPost.category}</span>
-                  <strong>{relatedPost.title}</strong>
+                  <span>
+                    {relatedPost.sharedTags.length > 0
+                      ? relatedPost.sharedTags.slice(0, 2).join(" / ")
+                      : relatedPost.sharesCategory
+                        ? "Same lane"
+                        : "Nearby in sequence"}
+                  </span>
+                  <strong>{relatedPost.post.title}</strong>
                 </Link>
               ))}
             </div>

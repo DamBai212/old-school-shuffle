@@ -26,6 +26,219 @@ export type Post = {
   sections: readonly PostSection[];
 };
 
+export type Category = {
+  title: string;
+  slug: string;
+  description: string;
+  noteTitle: string;
+  note: string;
+  routeNotes: readonly string[];
+  posts: readonly Post[];
+};
+
+export type Tag = {
+  title: string;
+  slug: string;
+  description: string;
+  noteTitle: string;
+  note: string;
+  posts: readonly Post[];
+};
+
+export type RelatedPost = {
+  post: Post;
+  sharedTags: readonly string[];
+  sharesCategory: boolean;
+  editorialDistance: number;
+  score: number;
+};
+
+export type RelatedCategory = {
+  category: Category;
+  sharedTags: readonly string[];
+  score: number;
+};
+
+export type ArchiveFilters = {
+  query?: string;
+  category?: string;
+  tag?: string;
+};
+
+type CategoryEditorialNote = Omit<Category, "posts" | "slug" | "title">;
+type TagEditorialNote = Omit<Tag, "posts" | "slug" | "title">;
+
+const categoryEditorialNotes: Record<string, CategoryEditorialNote> = {
+  "Cover story": {
+    description:
+      "The lead lane for big-picture arguments about club writing, scene identity, and how the publication should feel at full volume.",
+    noteTitle: "The thesis lane",
+    note:
+      "Cover stories are where the magazine stops reporting from a distance and states what the room is actually teaching us.",
+    routeNotes: [
+      "Start here when you want the publication's clearest point of view.",
+      "Expect bigger arguments, sharper framing, and the strongest mood-setting copy.",
+      "These pieces are the entrance point for everything else in the archive."
+    ]
+  },
+  "Scene report": {
+    description:
+      "Filed from the floor itself: records, pacing choices, and late-night details that only reveal themselves once the room is fully moving.",
+    noteTitle: "The floor report lane",
+    note:
+      "Scene reports stay close to texture and timing. They care about what changed in the room, not just what happened on paper.",
+    routeNotes: [
+      "Best when you want concrete late-night observations instead of broad theory.",
+      "Listen for tension, negative space, and the records that open corridors in a set.",
+      "Pair with the playlist when you want to hear the mood under the writing."
+    ]
+  },
+  "Floor notes": {
+    description:
+      "Dispatches about how rooms behave in real time: crowd patience, small-club energy, and the atmosphere built between obvious moments.",
+    noteTitle: "The room-reading lane",
+    note:
+      "Floor notes care about pressure management. They track the little changes in posture, light, and pacing that decide whether a set really lands.",
+    routeNotes: [
+      "Best entered when you care about crowd behavior more than genre labels.",
+      "Expect slower burns, murkier rooms, and a lot of attention to atmosphere.",
+      "These pieces are about why restraint can hit harder than impact."
+    ]
+  },
+  "Booth notes": {
+    description:
+      "Selector logic, bridge records, and booth-level tactics for keeping a shuffled or adventurous set coherent from first blend to last lights-on tune.",
+    noteTitle: "The selector lane",
+    note:
+      "Booth notes treat sequencing like structure. They are less about taste flexing and more about the records that make risk survivable.",
+    routeNotes: [
+      "Start here when you want set-design thinking instead of scene description.",
+      "Bridge tracks, pacing tools, and emotional glue matter more than big moments.",
+      "This lane connects directly to the playlist's logic."
+    ]
+  },
+  "After-hours essay": {
+    description:
+      "Longer reflections on club language, bodies in motion, and how to write about nightlife without reducing it to aesthetic wallpaper.",
+    noteTitle: "The lights-up lane",
+    note:
+      "After-hours essays arrive once the ringing in your ears becomes reflection. They keep the emotional thread alive after the room empties.",
+    routeNotes: [
+      "Best when you want reflection, social detail, and a little aftermath.",
+      "These pieces remember that nightlife is built from people, not just hardware.",
+      "Expect the emotional coda instead of the immediate floor report."
+    ]
+  }
+};
+
+const tagEditorialNotes: Record<string, TagEditorialNote> = {
+  "Basement house": {
+    description:
+      "Tracks and writing built for low ceilings, pressure-heavy grooves, and the kind of room that gets better the darker it feels.",
+    noteTitle: "The concrete-floor signal",
+    note:
+      "Basement house is about physical confidence more than brightness. It marks pieces that trust low-end pressure and close-room atmosphere."
+  },
+  "Neon dub": {
+    description:
+      "A tag for dubby delay, metallic shimmer, and club moods that glow without losing their edge.",
+    noteTitle: "The afterglow signal",
+    note:
+      "Neon dub links writing that carries both haze and detail: enough light to feel seductive, enough shadow to stay believable."
+  },
+  "Peak-time pressure": {
+    description:
+      "The point where tension stops building quietly and starts owning the room, without tipping into something obvious.",
+    noteTitle: "The pressure signal",
+    note:
+      "This topic is less about maximalism than control. Peak-time pressure marks pieces that understand impact as pacing, not just force."
+  },
+  "After-hours soul": {
+    description:
+      "The emotional residue that sneaks into the set after the hardest moments have already landed.",
+    noteTitle: "The lights-up signal",
+    note:
+      "After-hours soul catches the writing and music cues that keep a little tenderness in the room even after the pressure peaks."
+  },
+  "2AM": {
+    description:
+      "A late-night topic for the records, decisions, and moods that only make full sense once the room has properly settled in.",
+    noteTitle: "The 2AM signal",
+    note:
+      "2AM is when obviousness stops working. This topic gathers pieces that care about patience, corridors, and half-hidden hooks."
+  },
+  "Negative space": {
+    description:
+      "The clipped vocal, the delayed snare, the half-empty bar that makes the next one land harder.",
+    noteTitle: "The restraint signal",
+    note:
+      "Negative space marks archive pieces that find power in what is withheld instead of what is announced up front."
+  },
+  "Low-end pressure": {
+    description:
+      "Bass-led confidence, chest-level tension, and the weight underneath a room's best decisions.",
+    noteTitle: "The sub-bass signal",
+    note:
+      "Low-end pressure is where the archive tracks gravity. These pieces pay attention to what the floor feels before it looks."
+  },
+  "Basement sets": {
+    description:
+      "A topic for small-room pacing, murky transitions, and the kind of set design that wins trust without showing off.",
+    noteTitle: "The room-shape signal",
+    note:
+      "Basement sets focus on environment as much as track choice. They care about how a space behaves when the selector stops rushing it."
+  },
+  Pacing: {
+    description:
+      "How a night moves, stalls, stretches, and eventually resolves once the room decides to believe in it.",
+    noteTitle: "The tempo-of-the-room signal",
+    note:
+      "Pacing is one of the archive's deepest concerns. It appears whenever structure matters more than spectacle."
+  },
+  Atmosphere: {
+    description:
+      "Smoke, light, bodies, and the tonal weather that turns a technically good set into a memorable room.",
+    noteTitle: "The weather signal",
+    note:
+      "Atmosphere connects the archive's writing about context: the parts of nightlife that live between records but change how every record lands."
+  },
+  "Bridge tracks": {
+    description:
+      "The cuts that quietly hold a set together when the order jumps between moods, eras, or emotional temperatures.",
+    noteTitle: "The glue signal",
+    note:
+      "Bridge tracks are structural. This topic highlights pieces that care about transitions, forgiveness, and narrative continuity."
+  },
+  Shuffle: {
+    description:
+      "Unpredictable order, controlled temperature, and the selector logic that keeps variety from becoming chaos.",
+    noteTitle: "The sequence signal",
+    note:
+      "Shuffle is more than a button here. It marks the archive's ongoing interest in how unpredictability still needs coherence."
+  },
+  "Set design": {
+    description:
+      "Architecture for the night: sequencing choices, pressure curves, and the records that make the whole room feel inevitable.",
+    noteTitle: "The architecture signal",
+    note:
+      "Set design gathers the archive's more tactical writing, where structure matters as much as sound selection."
+  },
+  "Club writing": {
+    description:
+      "How to write about nightlife without flattening it into gear talk, trend reports, or generic lifestyle texture.",
+    noteTitle: "The language signal",
+    note:
+      "Club writing is where the publication looks at itself. These pieces ask what language actually stays faithful to the room."
+  },
+  "Bodies in motion": {
+    description:
+      "The physical detail of a floor in motion: leaning, waiting, releasing, and trusting the next bar.",
+    noteTitle: "The human signal",
+    note:
+      "Bodies in motion keeps the archive grounded in people, not just systems. It marks pieces that remember nightlife is social before it is technical."
+  }
+};
+
 const posts: readonly Post[] = [
   {
     slug: "from-the-blog-to-the-booth",
@@ -235,8 +448,55 @@ export function getAllPosts() {
   return posts;
 }
 
+function slugifyValue(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function slugifyCategory(category: string) {
+  return slugifyValue(category);
+}
+
+export function getCategoryHref(category: string) {
+  return `/posts/category/${slugifyCategory(category)}`;
+}
+
+export function slugifyTag(tag: string) {
+  return slugifyValue(tag);
+}
+
+export function getTagHref(tag: string) {
+  return `/posts/tag/${slugifyTag(tag)}`;
+}
+
+export function getArchiveHref(filters: ArchiveFilters = {}) {
+  const params = new URLSearchParams();
+
+  if (filters.query?.trim()) {
+    params.set("q", filters.query.trim());
+  }
+
+  if (filters.category) {
+    params.set("lane", slugifyCategory(filters.category));
+  }
+
+  if (filters.tag) {
+    params.set("tag", slugifyTag(filters.tag));
+  }
+
+  const queryString = params.toString();
+
+  return queryString ? `/posts?${queryString}` : "/posts";
+}
+
 export function getPostBySlug(slug: string) {
   return posts.find((post) => post.slug === slug);
+}
+
+function getPostIndex(slug: string) {
+  return posts.findIndex((post) => post.slug === slug);
 }
 
 export function getAdjacentPosts(slug: string) {
@@ -264,4 +524,218 @@ export function getPostsByCategory() {
     groups[post.category]!.push(post);
     return groups;
   }, {});
+}
+
+export function getPostsByTag() {
+  return posts.reduce<Record<string, Post[]>>((groups, post) => {
+    post.tags.forEach((tag) => {
+      if (!groups[tag]) {
+        groups[tag] = [];
+      }
+
+      groups[tag]!.push(post);
+    });
+
+    return groups;
+  }, {});
+}
+
+function getFallbackCategoryNote(category: string): CategoryEditorialNote {
+  return {
+    description:
+      `${category} is one of the archive's editorial lanes, collecting posts that share a common mood and point of view.`,
+    noteTitle: `${category} lane`,
+    note:
+      "Each lane should feel like its own route through the magazine, with a distinct pace, pressure level, and emotional temperature.",
+    routeNotes: [
+      "Start with the lane's current issue.",
+      "Use the archive to jump between adjacent moods.",
+      "Pair the writing with the playlist for the full atmosphere."
+    ]
+  };
+}
+
+function getFallbackTagNote(tag: string): TagEditorialNote {
+  return {
+    description:
+      `${tag} is one of the archive's recurring topic signals, linking posts that share a common pressure point, atmosphere, or writing preoccupation.`,
+    noteTitle: `${tag} signal`,
+    note:
+      "Tags are the publication's second route through the archive. They connect moods and ideas that cut across lanes."
+  };
+}
+
+export function getCategories() {
+  const groups = getPostsByCategory();
+
+  return Object.entries(groups).map(([title, groupedPosts]) => {
+    const editorialNote =
+      categoryEditorialNotes[title] ?? getFallbackCategoryNote(title);
+
+    return {
+      title,
+      slug: slugifyCategory(title),
+      ...editorialNote,
+      posts: groupedPosts
+    } satisfies Category;
+  });
+}
+
+export function getCategoryBySlug(slug: string) {
+  return getCategories().find((category) => category.slug === slug);
+}
+
+export function getCategoryByName(name: string) {
+  return getCategories().find((category) => category.title === name);
+}
+
+export function getTags() {
+  const groups = getPostsByTag();
+
+  return Object.entries(groups)
+    .sort(([leftTitle, leftPosts], [rightTitle, rightPosts]) => {
+      if (rightPosts.length !== leftPosts.length) {
+        return rightPosts.length - leftPosts.length;
+      }
+
+      return leftTitle.localeCompare(rightTitle);
+    })
+    .map(([title, groupedPosts]) => {
+      const editorialNote =
+        tagEditorialNotes[title] ?? getFallbackTagNote(title);
+
+      return {
+        title,
+        slug: slugifyTag(title),
+        ...editorialNote,
+        posts: groupedPosts
+      } satisfies Tag;
+    });
+}
+
+export function getTagBySlug(slug: string) {
+  return getTags().find((tag) => tag.slug === slug);
+}
+
+export function getTagByName(name: string) {
+  return getTags().find((tag) => tag.title === name);
+}
+
+export function getRelatedPosts(slug: string, limit = 3) {
+  const post = getPostBySlug(slug);
+  const currentIndex = getPostIndex(slug);
+
+  if (!post || currentIndex === -1) {
+    return [];
+  }
+
+  return posts
+    .filter((candidate) => candidate.slug !== slug)
+    .map((candidate) => {
+      const sharedTags = candidate.tags.filter((tag) => post.tags.includes(tag));
+      const sharesCategory = candidate.category === post.category;
+      const candidateIndex = getPostIndex(candidate.slug);
+      const editorialDistance = Math.abs(candidateIndex - currentIndex);
+      const proximityScore = Math.max(0, 3 - editorialDistance);
+      const score =
+        sharedTags.length * 4 +
+        (sharesCategory ? 3 : 0) +
+        proximityScore;
+
+      return {
+        post: candidate,
+        sharedTags,
+        sharesCategory,
+        editorialDistance,
+        score
+      } satisfies RelatedPost;
+    })
+    .sort((leftMatch, rightMatch) => {
+      if (rightMatch.score !== leftMatch.score) {
+        return rightMatch.score - leftMatch.score;
+      }
+
+      if (rightMatch.sharedTags.length !== leftMatch.sharedTags.length) {
+        return rightMatch.sharedTags.length - leftMatch.sharedTags.length;
+      }
+
+      return leftMatch.editorialDistance - rightMatch.editorialDistance;
+    })
+    .slice(0, limit);
+}
+
+export function getRelatedCategories(slug: string, limit = 4) {
+  const categories = getCategories();
+  const currentCategory = categories.find((category) => category.slug === slug);
+  const currentIndex = categories.findIndex((category) => category.slug === slug);
+
+  if (!currentCategory || currentIndex === -1) {
+    return [];
+  }
+
+  const currentTags = new Set(currentCategory.posts.flatMap((post) => post.tags));
+
+  return categories
+    .filter((candidateCategory) => candidateCategory.slug !== slug)
+    .map((candidateCategory, index) => {
+      const candidateTags = new Set(
+        candidateCategory.posts.flatMap((post) => post.tags)
+      );
+      const sharedTags = [...currentTags].filter((tag) => candidateTags.has(tag));
+      const editorialDistance = Math.abs(index - currentIndex);
+      const proximityScore = Math.max(0, 3 - editorialDistance);
+      const score = sharedTags.length * 4 + proximityScore;
+
+      return {
+        category: candidateCategory,
+        sharedTags,
+        score
+      } satisfies RelatedCategory;
+    })
+    .sort((leftMatch, rightMatch) => {
+      if (rightMatch.score !== leftMatch.score) {
+        return rightMatch.score - leftMatch.score;
+      }
+
+      if (rightMatch.sharedTags.length !== leftMatch.sharedTags.length) {
+        return rightMatch.sharedTags.length - leftMatch.sharedTags.length;
+      }
+
+      return leftMatch.category.title.localeCompare(rightMatch.category.title);
+    })
+    .slice(0, limit);
+}
+
+export function getRelatedTags(tagName: string, limit = 6) {
+  const tag = getTagByName(tagName);
+
+  if (!tag) {
+    return [];
+  }
+
+  const counts = new Map<string, number>();
+
+  tag.posts.forEach((post) => {
+    post.tags.forEach((candidateTag) => {
+      if (candidateTag === tagName) {
+        return;
+      }
+
+      counts.set(candidateTag, (counts.get(candidateTag) ?? 0) + 1);
+    });
+  });
+
+  return getTags()
+    .filter((candidateTag) => counts.has(candidateTag.title))
+    .sort((leftTag, rightTag) => {
+      const rightCount = counts.get(rightTag.title) ?? 0;
+      const leftCount = counts.get(leftTag.title) ?? 0;
+
+      if (rightCount !== leftCount) {
+        return rightCount - leftCount;
+      }
+
+      return leftTag.title.localeCompare(rightTag.title);
+    })
+    .slice(0, limit);
 }

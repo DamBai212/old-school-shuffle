@@ -166,10 +166,18 @@ export function getPlaylistMomentTitle(slug: PlaylistMomentSlug) {
   return playlistMomentNotes[slug].title;
 }
 
+export function getPlaylistMomentHref(slug: PlaylistMomentSlug) {
+  return `/playlist/${slug}`;
+}
+
 export function getPlaylistMoments() {
   return Object.entries(playlistMomentNotes).map(([slug, moment]) => ({
     slug: slug as PlaylistMomentSlug,
     ...moment,
     tracks: playlistTracks.filter((track) => track.moment === slug)
   })) satisfies PlaylistMoment[];
+}
+
+export function getPlaylistMomentBySlug(slug: string) {
+  return getPlaylistMoments().find((moment) => moment.slug === slug);
 }

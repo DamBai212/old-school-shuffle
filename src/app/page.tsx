@@ -6,7 +6,11 @@ import {
   getTagHref,
   getTags
 } from "@/content/posts";
-import { getPlaylistMoments, getPlaylistTracks } from "@/content/playlist";
+import {
+  getPlaylistMomentHref,
+  getPlaylistMoments,
+  getPlaylistTracks
+} from "@/content/playlist";
 import { ShufflePlaylist } from "@/components/shuffle-playlist";
 
 const editorNotes = [
@@ -229,8 +233,8 @@ export default function HomePage() {
               </div>
 
               <div className="story-link-row">
-                <Link className="story-link" href={getTagHref(moment.archiveTag)}>
-                  Follow this signal
+                <Link className="story-link" href={getPlaylistMomentHref(moment.slug)}>
+                  Open mix
                 </Link>
               </div>
             </article>

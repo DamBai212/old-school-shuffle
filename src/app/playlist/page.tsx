@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ShufflePlaylist } from "@/components/shuffle-playlist";
 import {
+  getPlaylistMomentHref,
   getPlaylistMomentTitle,
   getPlaylistMoments,
   getPlaylistTracks
@@ -156,8 +157,8 @@ export default function PlaylistPage() {
               </div>
 
               <div className="story-link-row">
-                <Link className="story-link" href={getArchiveHref({ tag: moment.archiveTag })}>
-                  Open matching archive signal
+                <Link className="story-link" href={getPlaylistMomentHref(moment.slug)}>
+                  Open mix
                 </Link>
               </div>
             </article>

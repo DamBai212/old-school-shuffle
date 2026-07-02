@@ -1213,6 +1213,20 @@ h3 {
 .route-card {
   display: grid;
   gap: 0.9rem;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.route-card:hover,
+.route-card:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(30, 215, 96, 0.22);
+  background:
+    radial-gradient(circle at top right, rgba(30, 215, 96, 0.18), transparent 28%),
+    linear-gradient(155deg, rgba(38, 38, 38, 0.98), rgba(18, 18, 18, 0.98)),
+    rgba(18, 18, 18, 0.94);
 }
 
 .route-card::after,

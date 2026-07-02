@@ -12,6 +12,7 @@ dedicated shuffle playlist page that feels like part magazine and part booth mon
 - Archive lane pages under `/posts/category/[slug]`
 - Topic signal pages under `/posts/tag/[slug]`
 - Dedicated playlist route at `/playlist` with a route map back into the archive
+- Dedicated mix pages under `/playlist/[slug]`
 - Strict TypeScript, ESLint, and GitHub Actions CI
 - Docker setup for running the app in a container
 
@@ -73,6 +74,7 @@ Copy `.env.local.example` to `.env.local` and adjust values as needed.
 - `/posts/tag/[slug]` for archive topics by tag
 - `/posts/[slug]` for individual stories
 - `/playlist` for the full booth queue
+- `/playlist/[slug]` for editorial mix pages
 
 ## Scripts
 
@@ -117,7 +119,9 @@ The app is exposed on `http://localhost:3001`.
     |   |-- icon.svg
     |   |-- layout.tsx
     |   |-- page.tsx
-    |   |-- playlist/page.tsx
+    |   |-- playlist/
+    |   |   |-- [slug]/page.tsx
+    |   |   `-- page.tsx
     |   `-- posts/
     |       |-- [slug]/page.tsx
     |       |-- category/[slug]/page.tsx

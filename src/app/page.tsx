@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SpotifySpotlight } from "@/components/spotify-spotlight";
 import {
   getAllPosts,
   getCategories,
@@ -12,6 +13,7 @@ import {
   getPlaylistTracks
 } from "@/content/playlist";
 import { ShufflePlaylist } from "@/components/shuffle-playlist";
+import { getSpotifyEditorialPlaylist } from "@/lib/spotify";
 
 const editorNotes = [
   "Lead with discoverability: every story should feel one click away from a deeper queue.",
@@ -19,7 +21,7 @@ const editorNotes = [
   "Keep the energy dark, curated, and conversational so the page reads like a listener's nightly home screen."
 ] as const;
 
-export default function HomePage() {
+export default async function HomePage() {
   const posts = getAllPosts();
   const categories = getCategories();
   const topSignals = getTags().slice(0, 6);
@@ -32,6 +34,7 @@ export default function HomePage() {
   const tagline =
     process.env.NEXT_PUBLIC_TAGLINE ??
     "Playlist-led music writing, after-hours recommendations, and an editorial queue built to be explored like a stream.";
+  const spotifySpotlight = await getSpotifyEditorialPlaylist();
   const pulseItems = [
     {
       label: "In rotation",
@@ -137,6 +140,8 @@ export default function HomePage() {
               </Link>
             </div>
           </aside>
+
+          <SpotifySpotlight fallbackTracks={playlistTracks} spotlight={spotifySpotlight} />
         </div>
       </section>
 

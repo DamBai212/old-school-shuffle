@@ -2,6 +2,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
+  getPlaylistHref,
+  getPlaylistMomentHref,
+  getPlaylistMomentTitle,
+  getPlaylistTrackByCue
+} from "@/content/playlist";
+import {
   getAdjacentPosts,
   getAllPosts,
   getCategoryHref,
@@ -47,6 +53,14 @@ export default function PostPage({ params }: PostPageProps) {
   const { previousPost, nextPost } = getAdjacentPosts(post.slug);
   const categoryHref = getCategoryHref(post.category);
   const relatedPosts = getRelatedPosts(post.slug, 3);
+  const cueTrack = getPlaylistTrackByCue(post.trackCue.title, post.trackCue.artist);
+  const cueTurnTitle = cueTrack ? getPlaylistMomentTitle(cueTrack.moment) : undefined;
+  const queueHref = cueTrack
+    ? getPlaylistHref({
+        query: cueTrack.title,
+        turn: cueTrack.moment
+      })
+    : "/playlist";
 
   return (
     <main className="blog-shell article-shell">
@@ -146,10 +160,24 @@ export default function PostPage({ params }: PostPageProps) {
             <p className="playlist-artist">{post.trackCue.artist}</p>
             <p className="article-sidecopy">{post.trackCue.note}</p>
 
+            {cueTrack ? (
+              <div className="now-stats">
+                <span>{cueTurnTitle}</span>
+                <span>{cueTrack.length}</span>
+                <span>{cueTrack.bpm}</span>
+              </div>
+            ) : null}
+
             <div className="story-link-row">
-              <Link className="story-link" href="/playlist">
-                Hear the full queue
+              <Link className="story-link" href={queueHref}>
+                {cueTrack ? "Open lead cue in queue" : "Hear the full queue"}
               </Link>
+
+              {cueTrack ? (
+                <Link className="article-back" href={getPlaylistMomentHref(cueTrack.moment)}>
+                  Open {cueTurnTitle} mix
+                </Link>
+              ) : null}
             </div>
           </section>
 

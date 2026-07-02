@@ -25,6 +25,12 @@ export type PlaylistMoment = {
   tracks: readonly PlaylistTrack[];
 };
 
+export type PlaylistFilters = {
+  query?: string;
+  turn?: PlaylistMomentSlug;
+  lane?: string;
+};
+
 const playlistMomentNotes = {
   threshold: {
     title: "Threshold",
@@ -158,6 +164,13 @@ const playlistTracks: readonly PlaylistTrack[] = [
   }
 ] as const;
 
+function slugifyValue(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export function getPlaylistTracks() {
   return playlistTracks;
 }
@@ -170,6 +183,26 @@ export function getPlaylistMomentHref(slug: PlaylistMomentSlug) {
   return `/playlist/${slug}`;
 }
 
+export function getPlaylistHref(filters: PlaylistFilters = {}) {
+  const params = new URLSearchParams();
+
+  if (filters.query?.trim()) {
+    params.set("q", filters.query.trim());
+  }
+
+  if (filters.turn) {
+    params.set("turn", filters.turn);
+  }
+
+  if (filters.lane?.trim()) {
+    params.set("lane", slugifyValue(filters.lane));
+  }
+
+  const queryString = params.toString();
+
+  return queryString ? `/playlist?${queryString}` : "/playlist";
+}
+
 export function getPlaylistMoments() {
   return Object.entries(playlistMomentNotes).map(([slug, moment]) => ({
     slug: slug as PlaylistMomentSlug,
@@ -180,4 +213,28 @@ export function getPlaylistMoments() {
 
 export function getPlaylistMomentBySlug(slug: string) {
   return getPlaylistMoments().find((moment) => moment.slug === slug);
+}
+
+export function getPlaylistMomentByArchiveTag(tag: string) {
+  return getPlaylistMoments().find((moment) => moment.archiveTag === tag);
+}
+
+export function getPlaylistTrackByCue(title: string, artist?: string) {
+  return playlistTracks.find((track) => {
+    if (track.title !== title) {
+      return false;
+    }
+
+    if (!artist) {
+      return true;
+    }
+
+    return track.artist === artist;
+  });
+}
+
+export function getPlaylistTracksByPostSlugs(postSlugs: readonly string[]) {
+  const slugSet = new Set(postSlugs);
+
+  return playlistTracks.filter((track) => slugSet.has(track.linkedPostSlug));
 }

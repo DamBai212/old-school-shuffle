@@ -1,18 +1,19 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { PlaylistExplorer } from "@/components/playlist-explorer";
+import { SpotifySpotlight } from "@/components/spotify-spotlight";
 import { ShufflePlaylist } from "@/components/shuffle-playlist";
 import {
   getPlaylistMomentHref,
-  getPlaylistMomentTitle,
   getPlaylistMoments,
   getPlaylistTracks
 } from "@/content/playlist";
 import {
   getArchiveHref,
-  getCategoryHref,
   getPostBySlug,
   getTagHref
 } from "@/content/posts";
+import { getSpotifyEditorialPlaylist } from "@/lib/spotify";
 
 export const metadata: Metadata = {
   title: "Playlist | Old School Shuffle",
@@ -26,10 +27,11 @@ const routeNotes = [
   "Let the final third glow a little. Even the darkest nights need one human moment."
 ] as const;
 
-export default function PlaylistPage() {
+export default async function PlaylistPage() {
   const tracks = getPlaylistTracks();
   const playlistMoments = getPlaylistMoments();
-  const relatedReads = tracks
+  const spotifySpotlight = await getSpotifyEditorialPlaylist();
+  const playlistEntries = tracks
     .map((track) => {
       const post = getPostBySlug(track.linkedPostSlug);
 
@@ -41,7 +43,7 @@ export default function PlaylistPage() {
     })
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
   const playlistSignals = Array.from(
-    new Set(relatedReads.flatMap(({ post }) => post.tags))
+    new Set(playlistEntries.flatMap(({ post }) => post.tags))
   ).slice(0, 6);
 
   return (
@@ -128,6 +130,12 @@ export default function PlaylistPage() {
               ))}
             </ul>
           </section>
+
+          <SpotifySpotlight
+            fallbackTracks={tracks}
+            showEmbed
+            spotlight={spotifySpotlight}
+          />
         </div>
       </section>
 
@@ -166,71 +174,7 @@ export default function PlaylistPage() {
         </div>
       </section>
 
-      <section className="playlist-board fade-up">
-        <div className="section-heading">
-          <p className="section-kicker">Full queue</p>
-          <h2>Every cut in tonight&apos;s rotation.</h2>
-        </div>
-
-        <div className="track-board">
-          {tracks.map((track, index) => {
-            const linkedPost = getPostBySlug(track.linkedPostSlug);
-
-            return (
-              <article className="track-card" key={`${track.title}-${track.artist}`}>
-                <p className="track-index">{`${index + 1}`.padStart(2, "0")}</p>
-
-                <div className="track-meta-row">
-                  <span>{track.lane}</span>
-                  <span>{track.length}</span>
-                  <span>{track.bpm}</span>
-                </div>
-
-                <p className="track-kicker">{getPlaylistMomentTitle(track.moment)}</p>
-                <h3>{track.title}</h3>
-                <p className="playlist-artist">{track.artist}</p>
-                <p className="track-note">{track.note}</p>
-
-                {linkedPost ? (
-                  <>
-                    <div className="track-chip-row" aria-label={`${track.title} archive links`}>
-                      <Link className="tag-chip" href={getCategoryHref(linkedPost.category)}>
-                        {linkedPost.category}
-                      </Link>
-
-                      {linkedPost.tags.slice(0, 2).map((tag) => (
-                        <Link className="tag-chip" href={getTagHref(tag)} key={tag}>
-                          {tag}
-                        </Link>
-                      ))}
-                    </div>
-
-                    <Link className="track-read-link" href={`/posts/${linkedPost.slug}`}>
-                      Read alongside: {linkedPost.title}
-                    </Link>
-                  </>
-                ) : null}
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="playlist-reading fade-up">
-        <div className="section-heading">
-          <p className="section-kicker">Reading companion</p>
-          <h2>Track notes that point back into the magazine.</h2>
-        </div>
-
-        <div className="playlist-reading-grid">
-          {relatedReads.slice(0, 4).map(({ track, post }) => (
-            <Link className="article-link-card" href={`/posts/${post.slug}`} key={track.title}>
-              <span>{getPlaylistMomentTitle(track.moment)} / {track.title}</span>
-              <strong>{post.title}</strong>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <PlaylistExplorer entries={playlistEntries} />
     </main>
   );
 }

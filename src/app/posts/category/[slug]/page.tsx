@@ -2,6 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
+  getPlaylistHref,
+  getPlaylistTracksByPostSlugs
+} from "@/content/playlist";
+import {
   getArchiveHref,
   getCategories,
   getCategoryBySlug,
@@ -48,6 +52,10 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     new Set(category.posts.flatMap((post) => post.tags))
   ).slice(0, 5);
   const otherCategories = getRelatedCategories(category.slug, 4);
+  const matchingQueueTracks = getPlaylistTracksByPostSlugs(
+    category.posts.map((post) => post.slug)
+  );
+  const queueHref = getPlaylistHref({ lane: category.title });
 
   return (
     <main className="blog-shell category-shell">
@@ -94,8 +102,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         </article>
 
         <article className="signal-pill">
-          <span className="signal-label">Filed from</span>
-          <strong className="signal-value">{featuredPost.dateline}</strong>
+          <span className="signal-label">Queue matches</span>
+          <strong className="signal-value">{matchingQueueTracks.length}</strong>
         </article>
       </section>
 
@@ -145,8 +153,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             </ul>
 
             <div className="story-link-row">
-              <Link className="story-link" href="/playlist">
-                Pair it with the playlist
+              <Link className="story-link" href={queueHref}>
+                Open this lane in the queue
               </Link>
             </div>
           </section>

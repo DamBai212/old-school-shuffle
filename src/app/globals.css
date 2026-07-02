@@ -618,6 +618,244 @@ h3 {
   line-height: 1.7;
 }
 
+.spotify-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at top right, rgba(30, 215, 96, 0.14), transparent 28%),
+    radial-gradient(circle at 15% 12%, rgba(255, 255, 255, 0.05), transparent 22%),
+    linear-gradient(155deg, rgba(34, 34, 34, 0.96), rgba(15, 15, 15, 0.96)),
+    rgba(18, 18, 18, 0.92);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.spotify-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.spotify-card h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.spotify-state-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.2rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(30, 215, 96, 0.18);
+  border-radius: 999px;
+  background: rgba(30, 215, 96, 0.12);
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+
+.spotify-hero {
+  display: grid;
+  gap: 1rem;
+  align-items: flex-start;
+  grid-template-columns: 140px minmax(0, 1fr);
+}
+
+.spotify-cover-shell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(30, 215, 96, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 24px rgba(30, 215, 96, 0.08);
+}
+
+.spotify-cover {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.spotify-cover-placeholder {
+  background:
+    radial-gradient(circle, rgba(30, 215, 96, 0.16), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+}
+
+.spotify-summary,
+.spotify-preview {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.spotify-description,
+.spotify-hint {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: rgba(247, 242, 235, 0.78);
+}
+
+.spotify-hint code {
+  padding: 0.2rem 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--foam);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+}
+
+.spotify-preview-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.spotify-preview-row {
+  display: grid;
+  gap: 0.8rem;
+  align-items: center;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.spotify-preview-row-active {
+  border-radius: 20px;
+  background: rgba(30, 215, 96, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(30, 215, 96, 0.08);
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+}
+
+.spotify-preview-index {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(242, 235, 224, 0.54);
+}
+
+.spotify-preview-link {
+  min-width: 0;
+  display: grid;
+  gap: 0.8rem;
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr) auto;
+  transition:
+    transform 180ms ease,
+    color 180ms ease;
+}
+
+.spotify-preview-link:hover,
+.spotify-preview-link:focus-visible {
+  transform: translateY(-1px);
+}
+
+.spotify-preview-link-static {
+  cursor: default;
+}
+
+.spotify-preview-copy {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.spotify-preview-copy strong {
+  font-size: 1rem;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.spotify-preview-copy span,
+.spotify-preview-meta {
+  font-family: var(--sans);
+  font-size: 0.84rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(242, 235, 224, 0.68);
+}
+
+.spotify-preview-meta {
+  white-space: nowrap;
+}
+
+.spotify-preview-button {
+  min-height: 2.5rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgba(30, 215, 96, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--foam);
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.spotify-preview-button:hover,
+.spotify-preview-button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(30, 215, 96, 0.28);
+  background: rgba(30, 215, 96, 0.14);
+}
+
+.spotify-preview-button:disabled {
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(242, 235, 224, 0.46);
+}
+
+.spotify-preview-button-active {
+  border-color: rgba(30, 215, 96, 0.24);
+  background: linear-gradient(135deg, rgba(30, 215, 96, 0.94), rgba(127, 240, 166, 0.92));
+  color: #041109;
+}
+
+.spotify-preview-footnote {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(242, 235, 224, 0.6);
+}
+
+.spotify-embed-shell {
+  padding-top: 0.2rem;
+}
+
+.spotify-embed {
+  width: 100%;
+  min-height: 352px;
+  border: 0;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
 .quote-card,
 .sidebar-card {
   padding: 1.4rem;
@@ -975,6 +1213,12 @@ h3 {
 
 .archive-groups-tight {
   margin-top: 0.25rem;
+}
+
+.playlist-explorer-stack {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.4rem;
 }
 
 .playlist-board,
@@ -1498,6 +1742,15 @@ h3 {
     width: min(100%, 220px);
     margin: 0 auto;
   }
+
+  .spotify-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .spotify-cover-shell {
+    width: min(100%, 220px);
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1511,9 +1764,32 @@ h3 {
 
   .post-card h3,
   .playlist-header h2,
+  .spotify-card h2,
   .sidebar-card h2,
   .section-heading h2,
   .now-copy h3 {
     font-size: 2.1rem;
+  }
+
+  .spotify-preview-link {
+    grid-template-columns: 1fr;
+  }
+
+  .spotify-embed {
+    min-height: 320px;
+  }
+
+  .spotify-preview-row {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .spotify-preview-row-active {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+  }
+
+  .spotify-preview-button {
+    width: 100%;
   }
 }

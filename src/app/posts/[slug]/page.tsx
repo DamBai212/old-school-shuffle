@@ -22,6 +22,13 @@ type PostPageProps = {
   };
 };
 
+function getSectionId(heading: string) {
+  return heading
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({
     slug: post.slug
@@ -116,7 +123,11 @@ export default function PostPage({ params }: PostPageProps) {
 
           <div className="article-body">
             {post.sections.map((section) => (
-              <section className="article-section" key={section.heading}>
+              <section
+                className="article-section"
+                id={getSectionId(section.heading)}
+                key={section.heading}
+              >
                 <h2>{section.heading}</h2>
 
                 {section.paragraphs.map((paragraph) => (
@@ -154,6 +165,24 @@ export default function PostPage({ params }: PostPageProps) {
         </div>
 
         <aside className="article-sidebar">
+          <section className="sidebar-card article-toc">
+            <p className="section-kicker">In this piece</p>
+            <h2>Route map</h2>
+
+            <nav aria-label="Article sections" className="toc-link-list">
+              {post.sections.map((section, index) => (
+                <Link
+                  className="toc-link"
+                  href={`#${getSectionId(section.heading)}`}
+                  key={section.heading}
+                >
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{section.heading}</strong>
+                </Link>
+              ))}
+            </nav>
+          </section>
+
           <section className="sidebar-card">
             <p className="section-kicker">Track cue</p>
             <h2>{post.trackCue.title}</h2>

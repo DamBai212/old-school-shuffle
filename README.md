@@ -128,8 +128,10 @@ deck.
 - `/posts/category/[slug]` for archive lanes
 - `/posts/tag/[slug]` for archive signals
 - `/posts/[slug]` for individual stories
+- `/health` for container and uptime checks
 - `/playlist` for the main listening room
 - `/playlist/[slug]` for editorial mix pages
+- `/health` for container and uptime checks
 
 ## Useful Scripts
 
@@ -157,7 +159,8 @@ If you want to run the production-shaped version locally:
 docker compose up --build
 ```
 
-The app will be available at `http://localhost:3001`.
+The app is exposed on `http://localhost:3000`, and health checks are available at
+`http://localhost:3000/health`.
 
 ## Project Shape
 
@@ -166,11 +169,14 @@ The app will be available at `http://localhost:3001`.
 |-- .github/workflows/ci.yml
 |-- Dockerfile
 |-- docker-compose.yml
+|-- package.json
+|-- package-lock.json
 |-- public/
 |   `-- record.svg
 `-- src/
     |-- app/
     |   |-- globals.css
+    |   |-- health/route.ts
     |   |-- icon.svg
     |   |-- layout.tsx
     |   |-- page.tsx

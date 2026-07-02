@@ -1026,6 +1026,7 @@ h3 {
 }
 
 .article-section {
+  scroll-margin-top: 1.5rem;
   padding-top: 1.2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -1043,6 +1044,44 @@ h3 {
 .article-sidebar {
   display: grid;
   gap: 1rem;
+}
+
+.article-toc {
+  position: sticky;
+  top: 1rem;
+}
+
+.toc-link-list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.toc-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-top: 1px solid rgba(122, 215, 255, 0.12);
+}
+
+.toc-link:hover,
+.toc-link:focus-visible {
+  color: var(--accent-soft);
+}
+
+.toc-link span {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: rgba(247, 242, 235, 0.52);
+}
+
+.toc-link strong {
+  font-size: 0.98rem;
+  line-height: 1.45;
+  font-weight: 600;
 }
 
 .article-sidecopy {
@@ -1670,6 +1709,10 @@ h3 {
   .playlist-reading-grid,
   .article-pager {
     grid-template-columns: 1fr;
+  }
+
+  .article-toc {
+    position: static;
   }
 
   .archive-explorer-head,

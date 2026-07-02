@@ -7,7 +7,7 @@ const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? "Old School Shuffle";
 export const metadata: Metadata = {
   title: siteName,
   description:
-    "Independent after-hours dispatches, floor reports, and a shuffle-led club playlist built with Next.js."
+    "Playlist-led music writing, curated listening queues, and a stream-shaped after-hours blog built with Next.js."
 };
 
 type RootLayoutProps = {

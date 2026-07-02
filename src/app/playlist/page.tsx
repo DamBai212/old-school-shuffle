@@ -47,16 +47,16 @@ export default function PlaylistPage() {
     <main className="blog-shell playlist-shell">
       <header className="masthead fade-up">
         <div className="brand-block">
-          <p className="eyebrow">Independent after-hours dispatches and shuffle-led booth notes</p>
+          <p className="eyebrow">Playlist-led music writing and after-hours recommendations</p>
           <Link className="brand-mark" href="/">
             Old School Shuffle
           </Link>
         </div>
 
         <nav aria-label="Primary" className="top-nav">
-          <Link href="/">Front page</Link>
-          <Link href="/posts">Archive</Link>
-          <Link href="/playlist">Playlist</Link>
+          <Link href="/">Feed</Link>
+          <Link href="/posts">Library</Link>
+          <Link href="/playlist">Listening room</Link>
         </nav>
       </header>
 

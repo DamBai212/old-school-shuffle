@@ -11,7 +11,7 @@ dedicated shuffle playlist page that feels like part magazine and part booth mon
 - Dynamic post pages under `/posts/[slug]`
 - Archive lane pages under `/posts/category/[slug]`
 - Topic signal pages under `/posts/tag/[slug]`
-- Dedicated playlist route at `/playlist`
+- Dedicated playlist route at `/playlist` with a route map back into the archive
 - Strict TypeScript, ESLint, and GitHub Actions CI
 - Docker setup for running the app in a container
 

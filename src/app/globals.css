@@ -956,6 +956,10 @@ h3 {
   margin-top: 1.5rem;
 }
 
+.playlist-route {
+  margin-top: 1.5rem;
+}
+
 .archive-explorer {
   margin-top: 1.5rem;
 }
@@ -1156,12 +1160,14 @@ h3 {
 }
 
 .track-board,
-.playlist-reading-grid {
+.playlist-reading-grid,
+.playlist-route-grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.route-card,
 .track-card {
   position: relative;
   overflow: hidden;
@@ -1178,6 +1184,12 @@ h3 {
     0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
+.route-card {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.route-card::after,
 .track-card::after {
   content: "";
   position: absolute;
@@ -1223,6 +1235,18 @@ h3 {
   color: rgba(247, 242, 235, 0.68);
 }
 
+.track-kicker {
+  position: relative;
+  z-index: 1;
+  margin: 1rem 0 0;
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 79, 163, 0.84);
+}
+
+.route-card h3,
 .track-card h3 {
   position: relative;
   z-index: 1;
@@ -1232,6 +1256,13 @@ h3 {
   color: var(--foam);
 }
 
+.route-card h3 {
+  margin: 0;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  line-height: 1.05;
+}
+
+.route-card p,
 .track-note {
   position: relative;
   z-index: 1;
@@ -1239,6 +1270,35 @@ h3 {
   font-size: 1.02rem;
   line-height: 1.75;
   color: rgba(247, 242, 235, 0.78);
+}
+
+.route-card p {
+  margin: 0;
+}
+
+.route-chip-row,
+.track-chip-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.25rem;
+}
+
+.route-track {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid rgba(173, 194, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(247, 242, 235, 0.72);
 }
 
 .track-read-link {
@@ -1321,6 +1381,7 @@ h3 {
   .archive-lead-grid,
   .archive-grid,
   .track-board,
+  .playlist-route-grid,
   .playlist-reading-grid,
   .article-pager {
     grid-template-columns: 1fr;

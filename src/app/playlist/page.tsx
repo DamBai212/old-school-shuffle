@@ -1,8 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ShufflePlaylist } from "@/components/shuffle-playlist";
-import { getPlaylistTracks } from "@/content/playlist";
-import { getPostBySlug } from "@/content/posts";
+import {
+  getPlaylistMomentTitle,
+  getPlaylistMoments,
+  getPlaylistTracks
+} from "@/content/playlist";
+import {
+  getArchiveHref,
+  getCategoryHref,
+  getPostBySlug,
+  getTagHref
+} from "@/content/posts";
 
 export const metadata: Metadata = {
   title: "Playlist | Old School Shuffle",
@@ -18,6 +27,7 @@ const routeNotes = [
 
 export default function PlaylistPage() {
   const tracks = getPlaylistTracks();
+  const playlistMoments = getPlaylistMoments();
   const relatedReads = tracks
     .map((track) => {
       const post = getPostBySlug(track.linkedPostSlug);
@@ -29,6 +39,9 @@ export default function PlaylistPage() {
       return { track, post };
     })
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
+  const playlistSignals = Array.from(
+    new Set(relatedReads.flatMap(({ post }) => post.tags))
+  ).slice(0, 6);
 
   return (
     <main className="blog-shell playlist-shell">
@@ -57,11 +70,11 @@ export default function PlaylistPage() {
           </p>
         </div>
 
-        <div className="archive-chip-row" aria-label="Playlist lane markers">
-          {tracks.slice(0, 5).map((track) => (
-            <span className="tag-chip" key={track.title}>
-              {track.lane}
-            </span>
+        <div className="archive-chip-row" aria-label="Playlist topic signals">
+          {playlistSignals.map((tag) => (
+            <Link className="tag-chip" href={getArchiveHref({ tag })} key={tag}>
+              {tag}
+            </Link>
           ))}
         </div>
       </section>
@@ -117,6 +130,41 @@ export default function PlaylistPage() {
         </div>
       </section>
 
+      <section className="playlist-route fade-up">
+        <div className="section-heading">
+          <p className="section-kicker">Route map</p>
+          <h2>Four turns through the night.</h2>
+        </div>
+
+        <div className="playlist-route-grid">
+          {playlistMoments.map((moment) => (
+            <article className="route-card" key={moment.slug}>
+              <p className="section-kicker">{moment.title}</p>
+              <h3>{moment.description}</h3>
+              <p>{moment.routeNote}</p>
+
+              <div className="route-chip-row">
+                <Link className="tag-chip" href={getTagHref(moment.archiveTag)}>
+                  {moment.archiveTag}
+                </Link>
+
+                {moment.tracks.slice(0, 2).map((track) => (
+                  <span className="route-track" key={track.title}>
+                    {track.title}
+                  </span>
+                ))}
+              </div>
+
+              <div className="story-link-row">
+                <Link className="story-link" href={getArchiveHref({ tag: moment.archiveTag })}>
+                  Open matching archive signal
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="playlist-board fade-up">
         <div className="section-heading">
           <p className="section-kicker">Full queue</p>
@@ -137,14 +185,29 @@ export default function PlaylistPage() {
                   <span>{track.bpm}</span>
                 </div>
 
+                <p className="track-kicker">{getPlaylistMomentTitle(track.moment)}</p>
                 <h3>{track.title}</h3>
                 <p className="playlist-artist">{track.artist}</p>
                 <p className="track-note">{track.note}</p>
 
                 {linkedPost ? (
-                  <Link className="track-read-link" href={`/posts/${linkedPost.slug}`}>
-                    Read alongside: {linkedPost.title}
-                  </Link>
+                  <>
+                    <div className="track-chip-row" aria-label={`${track.title} archive links`}>
+                      <Link className="tag-chip" href={getCategoryHref(linkedPost.category)}>
+                        {linkedPost.category}
+                      </Link>
+
+                      {linkedPost.tags.slice(0, 2).map((tag) => (
+                        <Link className="tag-chip" href={getTagHref(tag)} key={tag}>
+                          {tag}
+                        </Link>
+                      ))}
+                    </div>
+
+                    <Link className="track-read-link" href={`/posts/${linkedPost.slug}`}>
+                      Read alongside: {linkedPost.title}
+                    </Link>
+                  </>
                 ) : null}
               </article>
             );
@@ -161,7 +224,7 @@ export default function PlaylistPage() {
         <div className="playlist-reading-grid">
           {relatedReads.slice(0, 4).map(({ track, post }) => (
             <Link className="article-link-card" href={`/posts/${post.slug}`} key={track.title}>
-              <span>{track.title}</span>
+              <span>{getPlaylistMomentTitle(track.moment)} / {track.title}</span>
               <strong>{post.title}</strong>
             </Link>
           ))}

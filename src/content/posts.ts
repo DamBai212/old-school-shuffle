@@ -117,6 +117,18 @@ const categoryEditorialNotes: Record<string, CategoryEditorialNote> = {
       "This lane connects directly to the playlist's logic."
     ]
   },
+  "Listening guide": {
+    description:
+      "Practical routes through the archive for readers who want to translate the writing into an actual queue, warm-up, or after-hours sequence.",
+    noteTitle: "The route-map lane",
+    note:
+      "Listening guides turn the magazine's atmosphere into a usable path. They care about where to start, when to hold back, and how one piece of writing can point toward the next record.",
+    routeNotes: [
+      "Best when you want the archive to become a sequence, not just a stack of posts.",
+      "Expect practical pacing cues, cross-links into the playlist, and room-first listening logic.",
+      "Use this lane when you are building a mood and need the order to matter."
+    ]
+  },
   "After-hours essay": {
     description:
       "Longer reflections on club language, bodies in motion, and how to write about nightlife without reducing it to aesthetic wallpaper.",
@@ -240,6 +252,52 @@ const tagEditorialNotes: Record<string, TagEditorialNote> = {
 };
 
 const posts: readonly Post[] = [
+  {
+    slug: "how-to-build-a-listening-route-through-the-night",
+    category: "Listening guide",
+    title: "How to build a listening route through the night without losing the room.",
+    excerpt:
+      "A practical guide to turning archive lanes, bridge tracks, and atmosphere cues into one coherent after-hours sequence.",
+    deck:
+      "A good listening route is not a playlist with nicer typography. It is a sequence of decisions: where the room enters, where the pressure gathers, and where the last bit of glow is allowed to stay.",
+    author: "Mara Ellis",
+    dateline: "Route desk",
+    readLabel: "6 min read",
+    cardLabel: "Listening guide",
+    issue: "Route notes 01",
+    tags: ["Pacing", "Bridge tracks", "Atmosphere"],
+    quote:
+      "The route only works when every jump still feels like it was listening to the room before it moved.",
+    trackCue: {
+      title: "Signal Between Rooms",
+      artist: "Mira Vale",
+      note:
+        "A route needs one record that can change the ceiling height without changing the room's trust."
+    },
+    sections: [
+      {
+        heading: "Start with temperature, not tempo",
+        paragraphs: [
+          "The easiest way to make a listening route fall apart is to arrange it by speed alone. A fast record can feel weightless, and a slower one can still carry enormous pressure if the low end has enough patience. The better first question is simpler: what temperature should the room feel when this begins?",
+          "Start with a piece that gives the listener a doorway. It should name the atmosphere without spending all of it at once. Once the tone is clear, the route can start taking risks because the room understands what kind of night it has entered."
+        ]
+      },
+      {
+        heading: "Use bridge records as punctuation",
+        paragraphs: [
+          "Bridge tracks are not just transitions between stronger ideas. They are the punctuation marks that tell the listener how to read the shift. A good bridge lets a murky floor note move toward a brighter booth memo without making the sequence feel like it changed publications halfway through.",
+          "That is the useful trick for browsing the archive too. Move between lanes when a shared signal appears: pacing, atmosphere, low-end pressure, or the kind of negative space that keeps two different pieces breathing the same air."
+        ]
+      },
+      {
+        heading: "End before the glow turns decorative",
+        paragraphs: [
+          "Every after-hours route needs a final image, but it should not overstay. The closing stretch works best when it leaves a little voltage in the room instead of explaining exactly what the night meant.",
+          "Stop on the record, paragraph, or archive lane that still feels active. The point is not to drain the mood dry. It is to leave the listener with enough atmosphere to want the next route."
+        ]
+      }
+    ]
+  },
   {
     slug: "from-the-blog-to-the-booth",
     category: "Cover story",

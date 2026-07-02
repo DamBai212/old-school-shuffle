@@ -1,13 +1,7 @@
 import Link from "next/link";
-import { getAllPosts } from "@/content/posts";
-import { ShufflePlaylist, type PlaylistTrack } from "@/components/shuffle-playlist";
-
-const sceneTags = [
-  "Basement house",
-  "Neon dub",
-  "Peak-time pressure",
-  "After-hours soul"
-] as const;
+import { getAllPosts, getCategoryHref, getTagHref } from "@/content/posts";
+import { getPlaylistTracks } from "@/content/playlist";
+import { ShufflePlaylist } from "@/components/shuffle-playlist";
 
 const pulseItems = [
   {
@@ -24,44 +18,6 @@ const pulseItems = [
   }
 ] as const;
 
-const playlistTracks: readonly PlaylistTrack[] = [
-  {
-    title: "Midnight Strobe",
-    artist: "Velvet Transit",
-    length: "5:21",
-    bpm: "124 BPM",
-    vibe: "Cold synth shimmer, pressure-built bass, and a kick that lands like a light cue."
-  },
-  {
-    title: "Red Exit Sign",
-    artist: "June Arcade",
-    length: "4:48",
-    bpm: "120 BPM",
-    vibe: "Smoked-out chords and a patient groove for the first ten minutes after midnight."
-  },
-  {
-    title: "Chrome Hearts Dub",
-    artist: "Night Service",
-    length: "6:03",
-    bpm: "126 BPM",
-    vibe: "Dub delay, metallic percussion, and a bassline built for concrete walls."
-  },
-  {
-    title: "Blue Laser Static",
-    artist: "Saint Monroe",
-    length: "3:57",
-    bpm: "122 BPM",
-    vibe: "A romantic hook hiding inside a track that still belongs in the darkest room."
-  },
-  {
-    title: "Studio 3AM",
-    artist: "Luna Static",
-    length: "5:09",
-    bpm: "128 BPM",
-    vibe: "Peak-time lift with enough restraint to keep the floor hungry for one more blend."
-  }
-] as const;
-
 const editorNotes = [
   "A great club page should feel like a flyer, a booth monitor, and a late-night diary at the same time.",
   "Shuffle works when every track still shares the same darkness level, even if the order breaks the rules.",
@@ -70,6 +26,7 @@ const editorNotes = [
 
 export default function HomePage() {
   const posts = getAllPosts();
+  const playlistTracks = getPlaylistTracks();
   const featuredPost = posts[0]!;
   const latestPosts = posts.slice(1, 5);
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? "Old School Shuffle";
@@ -89,8 +46,8 @@ export default function HomePage() {
 
         <nav aria-label="Primary" className="top-nav">
           <a href="#latest">Latest</a>
-          <a href="#playlist">Playlist</a>
-          <a href="#notes">Notes</a>
+          <Link href="/playlist">Playlist</Link>
+          <Link href="/posts">Archive</Link>
         </nav>
       </header>
 
@@ -107,7 +64,9 @@ export default function HomePage() {
         <article className="paper-card featured-story">
           <div className="story-badges">
             <span className="story-badge">{featuredPost.issue}</span>
-            <span className="story-issue">{featuredPost.category}</span>
+            <Link className="story-issue" href={getCategoryHref(featuredPost.category)}>
+              {featuredPost.category}
+            </Link>
           </div>
 
           <p className="section-kicker">Cover story</p>
@@ -124,9 +83,9 @@ export default function HomePage() {
 
           <div className="tag-row" aria-label="Music tags">
             {featuredPost.tags.map((tag) => (
-              <span className="tag-chip" key={tag}>
+              <Link className="tag-chip" href={getTagHref(tag)} key={tag}>
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
 
@@ -146,6 +105,12 @@ export default function HomePage() {
               The best shuffle order still sounds inevitable, like the lights changed
               exactly when the room needed them to.
             </p>
+
+            <div className="story-link-row">
+              <Link className="story-link" href="/playlist">
+                Step into the full playlist
+              </Link>
+            </div>
           </aside>
         </div>
       </section>
@@ -160,14 +125,23 @@ export default function HomePage() {
           <div className="post-grid">
             {latestPosts.map((post) => (
               <article className="post-card" key={post.title}>
+                <Link className="post-topline post-topline-link" href={getCategoryHref(post.category)}>
+                  {post.category}
+                </Link>
+
                 <Link className="post-card-link" href={`/posts/${post.slug}`}>
-                  <p className="post-topline">{post.category}</p>
                   <h3>{post.title}</h3>
                   <p className="post-excerpt">{post.excerpt}</p>
                   <p className="post-footer">{post.cardLabel}</p>
                 </Link>
               </article>
             ))}
+          </div>
+
+          <div className="latest-footer">
+            <Link className="story-link" href="/posts">
+              Browse full archive
+            </Link>
           </div>
         </section>
 

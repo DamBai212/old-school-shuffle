@@ -1,43 +1,40 @@
 # Old School Shuffle
 
-Minimal Ruby app scaffold for running Old School Shuffle in Docker.
+Old School Shuffle is a Next.js music editorial prototype built around a club-night
+visual language: a front page, a post archive, individual longform pieces, and a
+dedicated shuffle playlist page that feels like part magazine and part booth monitor.
 
-## Requirements
-- Docker + Docker Compose
+## What It Includes
 
-## Environment setup
-1. Copy the example env file:
-   ```bash
-   cp .env.example .env
-   ```
-2. Set `APP_SESSION_SECRET` to a long random value.
-3. Fill in `DATABASE_URL` and Spotify OAuth credentials.
+- Nightlife-inspired homepage with a reshuffling playlist and editorial modules
+- Archive page with shareable lane, signal, and search filters
+- Dynamic post pages under `/posts/[slug]`
+- Archive lane pages under `/posts/category/[slug]`
+- Topic signal pages under `/posts/tag/[slug]`
+- Dedicated playlist route at `/playlist` with a route map back into the archive
+- Strict TypeScript, ESLint, and GitHub Actions CI
+- Docker setup for running the app in a container
 
-## Run locally with Docker
-Old School Shuffle is now scaffolded as a minimal Next.js starter with TypeScript,
-App Router, and a production-oriented Docker setup.
+## Stack
 
-## What Is Included
-
-- Next.js app directory structure under `src/app`
-- TypeScript configuration with strict mode enabled
-- Retro-styled landing page to replace the empty placeholder repo
-- Multi-stage Dockerfile using Next.js standalone output
-- `docker-compose.yml` for running the app in a container
-- Example environment files for local development
+- Next.js 14 with the App Router
+- React 18
+- TypeScript
+- ESLint
+- Docker / Docker Compose
 
 ## Requirements
 
 - Node.js 18.17 or newer
 - npm
-- Docker and Docker Compose if you want to run it in a container
+- Docker and Docker Compose if you want to run the containerized build
 
-Node 20 is the recommended local version for this starter and is also what the
-Docker image uses. An `.nvmrc` file is included if you use `nvm`.
+Node 20 is the recommended local version and matches the Docker image. An `.nvmrc`
+file is included for `nvm` users.
 
 ## Local Development
 
-1. Install dependencies:
+1. Install the project dependencies.
 
    ```bash
    nvm install
@@ -45,33 +42,50 @@ Docker image uses. An `.nvmrc` file is included if you use `nvm`.
    npm install
    ```
 
-2. Create your local environment file:
+2. Create your local environment file.
 
    ```bash
    cp .env.local.example .env.local
    ```
 
-3. Start the development server:
+3. Start the development server.
 
    ```bash
    npm run dev
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000)
+4. Open [http://localhost:3000](http://localhost:3000).
 
-## Available Scripts
+## Environment Variables
 
-- `npm run dev` starts the local development server
+The app currently reads:
+
+- `NEXT_PUBLIC_SITE_NAME`
+- `NEXT_PUBLIC_TAGLINE`
+
+Copy `.env.local.example` to `.env.local` and adjust values as needed.
+
+## Routes
+
+- `/` for the homepage and featured shuffle module
+- `/posts` for the archive explorer with query-param filters
+- `/posts/category/[slug]` for archive lanes by category
+- `/posts/tag/[slug]` for archive topics by tag
+- `/posts/[slug]` for individual stories
+- `/playlist` for the full booth queue
+
+## Scripts
+
+- `npm run dev` starts the development server
 - `npm run build` creates the production build
-- `npm run lint` runs ESLint across the project
-- `npm run lint:fix` runs ESLint and applies safe auto-fixes where possible
 - `npm run start` runs the production server
+- `npm run lint` runs ESLint
+- `npm run lint:fix` runs ESLint with safe fixes
 - `npm run typecheck` runs the TypeScript compiler without emitting files
 
 ## Continuous Integration
 
-GitHub Actions now runs a CI workflow on all pushes and pull requests. The
-workflow uses Node 20 and runs:
+GitHub Actions runs on pushes and pull requests with:
 
 - `npm ci`
 - `npm run lint`
@@ -80,45 +94,46 @@ workflow uses Node 20 and runs:
 
 ## Docker
 
-To build and run the production container locally:
+Build and run the production container locally with:
 
 ```bash
 docker compose up --build
 ```
 
-The app is available at `http://localhost:3001` and health checks at `http://localhost:3001/health`.
-The app will be available at [http://localhost:3000](http://localhost:3000).
-Running through Docker is the easiest option if your local Node version is older.
-
-## Environment Variables
-
-The starter currently uses:
-
-- `NEXT_PUBLIC_SITE_NAME`
-- `NEXT_PUBLIC_TAGLINE`
-
-Copy `.env.local.example` to `.env.local` and adjust values as needed.
+The app is exposed on `http://localhost:3001`.
 
 ## Project Structure
 
 ```text
 .
+|-- .github/workflows/ci.yml
 |-- Dockerfile
 |-- docker-compose.yml
-|-- package.json
 |-- public/
 |   `-- record.svg
 `-- src/
-    `-- app/
-        |-- globals.css
-        |-- icon.svg
-        |-- layout.tsx
-        `-- page.tsx
+    |-- app/
+    |   |-- globals.css
+    |   |-- icon.svg
+    |   |-- layout.tsx
+    |   |-- page.tsx
+    |   |-- playlist/page.tsx
+    |   `-- posts/
+    |       |-- [slug]/page.tsx
+    |       |-- category/[slug]/page.tsx
+    |       |-- page.tsx
+    |       `-- tag/[slug]/page.tsx
+    |-- components/
+    |   |-- archive-explorer.tsx
+    |   `-- shuffle-playlist.tsx
+    `-- content/
+        |-- playlist.ts
+        `-- posts.ts
 ```
 
-## Suggested Next Steps
+## Next Ideas
 
-- add more routes or feature sections
-- connect the UI to a real data source or API
-- add tests now that linting and CI are in place
-- decide whether this remains a single app or grows into a multi-service project
+- connect the editorial content to a CMS or content collection workflow
+- add tests around route rendering and content helpers
+- expand the archive with more posts, multi-select filters, or issue-based navigation
+- add richer media treatments such as audio embeds or artist spotlights

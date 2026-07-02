@@ -2,14 +2,7 @@
 
 import Image from "next/image";
 import { startTransition, useState } from "react";
-
-export type PlaylistTrack = {
-  title: string;
-  artist: string;
-  length: string;
-  bpm: string;
-  vibe: string;
-};
+import type { PlaylistTrack } from "@/content/playlist";
 
 type ShufflePlaylistProps = {
   tracks: readonly PlaylistTrack[];

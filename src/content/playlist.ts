@@ -25,6 +25,18 @@ export type PlaylistMoment = {
   tracks: readonly PlaylistTrack[];
 };
 
+export type PlaylistFilters = {
+  query?: string;
+  turn?: PlaylistMomentSlug;
+  lane?: string;
+};
+
+export type PlaylistMomentPreview = {
+  title: string;
+  src: string;
+  description: string;
+};
+
 const playlistMomentNotes = {
   threshold: {
     title: "Threshold",
@@ -59,7 +71,46 @@ const playlistMomentNotes = {
   Omit<PlaylistMoment, "slug" | "tracks">
 >;
 
+const playlistMomentPreviews = {
+  threshold: {
+    title: "Threshold room sketch",
+    src: "/audio/threshold-room-preview.wav",
+    description:
+      "An original warm-up loop built for the first stretch of the room: smoked chords, patient low end, and a little empty air."
+  },
+  pressure: {
+    title: "Pressure room sketch",
+    src: "/audio/pressure-room-preview.wav",
+    description:
+      "An original club sketch with heavier kick pressure, darker bass movement, and the sense that the floor has fully committed."
+  },
+  bridge: {
+    title: "Bridge room sketch",
+    src: "/audio/bridge-room-preview.wav",
+    description:
+      "An original transition sketch designed to connect moods without losing momentum, like the record that forgives the last left turn."
+  },
+  "lights-up": {
+    title: "Lights-up room sketch",
+    src: "/audio/lights-up-room-preview.wav",
+    description:
+      "An original closing sketch with a little more glow and emotional lift, made for the final human moment of the night."
+  }
+} satisfies Record<PlaylistMomentSlug, PlaylistMomentPreview>;
+
 const playlistTracks: readonly PlaylistTrack[] = [
+  {
+    title: "Signal Between Rooms",
+    artist: "Mira Vale",
+    length: "4:41",
+    bpm: "125 BPM",
+    lane: "Listening guide",
+    moment: "bridge",
+    vibe: "A flexible bridge cut with cool pads, patient drums, and enough lift to turn one room into the next.",
+    note:
+      "This is the route-builder: the record that can change the ceiling height without making the floor feel like it left the night.",
+    linkedPostSlug: "how-to-build-a-listening-route-through-the-night"
+  },
   {
     title: "Midnight Strobe",
     artist: "Velvet Transit",
@@ -158,6 +209,13 @@ const playlistTracks: readonly PlaylistTrack[] = [
   }
 ] as const;
 
+function slugifyValue(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export function getPlaylistTracks() {
   return playlistTracks;
 }
@@ -166,10 +224,70 @@ export function getPlaylistMomentTitle(slug: PlaylistMomentSlug) {
   return playlistMomentNotes[slug].title;
 }
 
+export function getPlaylistMomentPreview(slug: PlaylistMomentSlug) {
+  return playlistMomentPreviews[slug];
+}
+
+export function getPlaylistMomentHref(slug: PlaylistMomentSlug) {
+  return `/playlist/${slug}`;
+}
+
+export function getPlaylistHref(filters: PlaylistFilters = {}) {
+  const params = new URLSearchParams();
+
+  if (filters.query?.trim()) {
+    params.set("q", filters.query.trim());
+  }
+
+  if (filters.turn) {
+    params.set("turn", filters.turn);
+  }
+
+  if (filters.lane?.trim()) {
+    params.set("lane", slugifyValue(filters.lane));
+  }
+
+  const queryString = params.toString();
+
+  return queryString ? `/playlist?${queryString}` : "/playlist";
+}
+
 export function getPlaylistMoments() {
   return Object.entries(playlistMomentNotes).map(([slug, moment]) => ({
     slug: slug as PlaylistMomentSlug,
     ...moment,
     tracks: playlistTracks.filter((track) => track.moment === slug)
   })) satisfies PlaylistMoment[];
+}
+
+export function getPlaylistMomentBySlug(slug: string) {
+  return getPlaylistMoments().find((moment) => moment.slug === slug);
+}
+
+export function getPlaylistMomentByArchiveTag(tag: string) {
+  return getPlaylistMoments().find((moment) => moment.archiveTag === tag);
+}
+
+export function getPlaylistTrackByCue(title: string, artist?: string) {
+  return playlistTracks.find((track) => {
+    if (track.title !== title) {
+      return false;
+    }
+
+    if (!artist) {
+      return true;
+    }
+
+    return track.artist === artist;
+  });
+}
+
+export function getPlaylistTracksByPostSlugs(postSlugs: readonly string[]) {
+  const slugSet = new Set(postSlugs);
+
+  return playlistTracks.filter((track) => slugSet.has(track.linkedPostSlug));
+}
+
+export function getPlaylistTracksByPostSlug(postSlug: string) {
+  return playlistTracks.filter((track) => track.linkedPostSlug === postSlug);
 }

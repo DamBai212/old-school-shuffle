@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { startTransition, useState } from "react";
+import { EditorialPreviewButton } from "@/components/editorial-preview-button";
 import type { PlaylistTrack } from "@/content/playlist";
 
 type ShufflePlaylistProps = {
@@ -41,11 +42,11 @@ export function ShufflePlaylist({ tracks }: ShufflePlaylistProps) {
       <div className="playlist-header">
         <div>
           <p className="playlist-label">Shuffle playlist</p>
-          <h2>Booth queue</h2>
+          <h2>Listening queue</h2>
         </div>
 
         <button className="shuffle-button" onClick={handleShuffle} type="button">
-          Reshuffle room
+          Shuffle play
         </button>
       </div>
 
@@ -62,7 +63,7 @@ export function ShufflePlaylist({ tracks }: ShufflePlaylistProps) {
         </div>
 
         <div className="now-copy">
-          <p className="playlist-meta">Now in the mix</p>
+          <p className="playlist-meta">Now streaming</p>
           <h3>{nowSpinning.title}</h3>
           <p className="playlist-artist">{nowSpinning.artist}</p>
           <p className="playlist-vibe">{nowSpinning.vibe}</p>
@@ -70,8 +71,14 @@ export function ShufflePlaylist({ tracks }: ShufflePlaylistProps) {
           <div className="now-stats">
             <span>{nowSpinning.length}</span>
             <span>{nowSpinning.bpm}</span>
-            <span>Drop #{shuffleCount}</span>
+            <span>Spin #{shuffleCount}</span>
           </div>
+
+          <EditorialPreviewButton
+            compact
+            key={`${nowSpinning.title}-${nowSpinning.artist}`}
+            track={nowSpinning}
+          />
         </div>
       </div>
 
@@ -91,8 +98,8 @@ export function ShufflePlaylist({ tracks }: ShufflePlaylistProps) {
       </ol>
 
       <p className="playlist-footer">
-        Smoke, pulse, pressure, and small flashes of melody that hit harder when
-        the order slips a little out of your control.
+        A handpicked queue for late-night listening, built to connect the writing,
+        the mood, the audio, and the next click back into the blog.
       </p>
     </section>
   );

@@ -1,6 +1,14 @@
+import { EditorialPreviewButton } from "@/components/editorial-preview-button";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import {
+  getPlaylistHref,
+  getPlaylistMomentHref,
+  getPlaylistMomentTitle,
+  getPlaylistTrackByCue,
+  getPlaylistTracksByPostSlug
+} from "@/content/playlist";
 import {
   getAdjacentPosts,
   getAllPosts,
@@ -54,21 +62,30 @@ export default function PostPage({ params }: PostPageProps) {
   const { previousPost, nextPost } = getAdjacentPosts(post.slug);
   const categoryHref = getCategoryHref(post.category);
   const relatedPosts = getRelatedPosts(post.slug, 3);
+  const cueTrack = getPlaylistTrackByCue(post.trackCue.title, post.trackCue.artist);
+  const matchedTracks = getPlaylistTracksByPostSlug(post.slug);
+  const cueTurnTitle = cueTrack ? getPlaylistMomentTitle(cueTrack.moment) : undefined;
+  const queueHref = cueTrack
+    ? getPlaylistHref({
+        query: cueTrack.title,
+        turn: cueTrack.moment
+      })
+    : "/playlist";
 
   return (
     <main className="blog-shell article-shell">
       <header className="masthead fade-up">
         <div className="brand-block">
-          <p className="eyebrow">Independent after-hours dispatches and shuffle-led booth notes</p>
+          <p className="eyebrow">Playlist-led music writing and after-hours recommendations</p>
           <Link className="brand-mark" href="/">
             Old School Shuffle
           </Link>
         </div>
 
         <nav aria-label="Primary" className="top-nav">
-          <Link href="/">Front page</Link>
-          <Link href="/posts">Archive</Link>
-          <Link href="/playlist">Playlist</Link>
+          <Link href="/">Feed</Link>
+          <Link href="/posts">Library</Link>
+          <Link href="/playlist">Listening room</Link>
         </nav>
       </header>
 
@@ -170,15 +187,49 @@ export default function PostPage({ params }: PostPageProps) {
           </section>
 
           <section className="sidebar-card">
-            <p className="section-kicker">Track cue</p>
+            <p className="section-kicker">Posted with this sound</p>
             <h2>{post.trackCue.title}</h2>
             <p className="playlist-artist">{post.trackCue.artist}</p>
             <p className="article-sidecopy">{post.trackCue.note}</p>
 
+            {cueTrack ? (
+              <>
+                <div className="now-stats">
+                  <span>{cueTurnTitle}</span>
+                  <span>{cueTrack.length}</span>
+                  <span>{cueTrack.bpm}</span>
+                </div>
+
+                <EditorialPreviewButton track={cueTrack} />
+              </>
+            ) : null}
+
+            {matchedTracks.length > 1 ? (
+              <div className="article-tracklist">
+                <p className="article-tracklist-label">Also in this post</p>
+
+                <div className="article-tracklist-items">
+                  {matchedTracks
+                    .filter((track) => track.title !== post.trackCue.title)
+                    .map((track) => (
+                      <span className="route-track" key={track.title}>
+                        {track.title}
+                      </span>
+                    ))}
+                </div>
+              </div>
+            ) : null}
+
             <div className="story-link-row">
-              <Link className="story-link" href="/playlist">
-                Hear the full queue
+              <Link className="story-link" href={queueHref}>
+                {cueTrack ? "Open lead cue in queue" : "Hear the full queue"}
               </Link>
+
+              {cueTrack ? (
+                <Link className="article-back" href={getPlaylistMomentHref(cueTrack.moment)}>
+                  Open {cueTurnTitle} mix
+                </Link>
+              ) : null}
             </div>
           </section>
 

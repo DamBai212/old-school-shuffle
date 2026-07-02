@@ -73,6 +73,7 @@ Copy `.env.local.example` to `.env.local` and adjust values as needed.
 - `/posts/tag/[slug]` for archive topics by tag
 - `/posts/[slug]` for individual stories
 - `/playlist` for the full booth queue
+- `/health` for container and uptime checks
 
 ## Scripts
 
@@ -100,7 +101,7 @@ Build and run the production container locally with:
 docker compose up --build
 ```
 
-The app is exposed on `http://localhost:3001`.
+The app is exposed on `http://localhost:3000`, and health checks are available at `http://localhost:3000/health`.
 
 ## Project Structure
 
@@ -109,11 +110,14 @@ The app is exposed on `http://localhost:3001`.
 |-- .github/workflows/ci.yml
 |-- Dockerfile
 |-- docker-compose.yml
+|-- package.json
+|-- package-lock.json
 |-- public/
 |   `-- record.svg
 `-- src/
     |-- app/
     |   |-- globals.css
+    |   |-- health/route.ts
     |   |-- icon.svg
     |   |-- layout.tsx
     |   |-- page.tsx

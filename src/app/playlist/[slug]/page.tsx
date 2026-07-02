@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { EditorialPreviewButton } from "@/components/editorial-preview-button";
 import {
   getPlaylistMomentBySlug,
   getPlaylistMomentHref,
@@ -160,6 +161,8 @@ export default function PlaylistMomentPage({ params }: PlaylistMomentPageProps) 
             {leadTrack.bpm}
           </p>
 
+          <EditorialPreviewButton track={leadTrack} />
+
           {leadPost ? (
             <div className="track-chip-row" aria-label={`${leadTrack.title} archive links`}>
               <Link className="tag-chip" href={getCategoryHref(leadPost.category)}>
@@ -240,6 +243,8 @@ export default function PlaylistMomentPage({ params }: PlaylistMomentPageProps) 
                 <h3>{track.title}</h3>
                 <p className="playlist-artist">{track.artist}</p>
                 <p className="track-note">{track.note}</p>
+
+                <EditorialPreviewButton track={track} />
 
                 {linkedPost ? (
                   <>

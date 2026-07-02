@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { EditorialPreviewButton } from "@/components/editorial-preview-button";
 import {
   usePathname,
   useRouter,
@@ -371,6 +372,8 @@ function PlaylistExplorerContent({
                   <h3>{track.title}</h3>
                   <p className="playlist-artist">{track.artist}</p>
                   <p className="track-note">{track.note}</p>
+
+                  <EditorialPreviewButton track={track} />
 
                   <div className="track-chip-row" aria-label={`${track.title} archive links`}>
                     <Link className="tag-chip" href={getCategoryHref(post.category)}>

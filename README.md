@@ -13,10 +13,12 @@ that. If you want a blank corporate shell, it is definitely not that.
 - A nightlife-inspired homepage with a reshuffling editorial playlist
 - A post archive with shareable lane, signal, and search filters
 - Individual story pages under `/posts/[slug]`
+- Story pages and homepage cards that are explicitly paired with matching queue tracks
 - Archive lane pages under `/posts/category/[slug]`
 - Topic signal pages under `/posts/tag/[slug]`
 - A full listening-room route at `/playlist`
 - Dedicated editorial mix pages under `/playlist/[slug]`
+- Built-in original audio sketches for the editorial queue, even without Spotify
 - An optional Spotify spotlight for pulling in one real public playlist with sample previews when available
 - Shareable listening-room filters for exploring the local queue by turn, lane, artist, or story
 - Story, lane, and topic pages that deep-link back into matching queue views
@@ -66,6 +68,11 @@ also an `.nvmrc` if you use `nvm`.
 
 You can run the site without Spotify. If you leave the Spotify variables blank,
 the app falls back to the built-in editorial playlist content.
+
+That built-in queue now includes original in-repo audio sketches for each major
+turn of the night, so the site can still play sound locally even before Spotify
+is configured. The homepage and story pages also use those pairings to present
+posts more like old music-blog entries that were "posted with" a matching sound.
 
 ## Environment Variables
 
@@ -131,7 +138,6 @@ deck.
 - `/health` for container and uptime checks
 - `/playlist` for the main listening room
 - `/playlist/[slug]` for editorial mix pages
-- `/health` for container and uptime checks
 
 ## Useful Scripts
 
@@ -170,9 +176,10 @@ The app is exposed on `http://localhost:3000`, and health checks are available a
 |-- Dockerfile
 |-- docker-compose.yml
 |-- package.json
-|-- package-lock.json
-|-- public/
-|   `-- record.svg
+    |-- package-lock.json
+    |-- public/
+    |   |-- audio/
+    |   `-- record.svg
 `-- src/
     |-- app/
     |   |-- globals.css
@@ -190,6 +197,7 @@ The app is exposed on `http://localhost:3000`, and health checks are available a
     |       `-- tag/[slug]/page.tsx
     |-- components/
     |   |-- archive-explorer.tsx
+    |   |-- editorial-preview-button.tsx
     |   |-- playlist-explorer.tsx
     |   |-- spotify-preview-queue.tsx
     |   |-- shuffle-playlist.tsx

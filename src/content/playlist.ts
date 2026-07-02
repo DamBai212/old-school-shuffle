@@ -31,6 +31,12 @@ export type PlaylistFilters = {
   lane?: string;
 };
 
+export type PlaylistMomentPreview = {
+  title: string;
+  src: string;
+  description: string;
+};
+
 const playlistMomentNotes = {
   threshold: {
     title: "Threshold",
@@ -65,7 +71,46 @@ const playlistMomentNotes = {
   Omit<PlaylistMoment, "slug" | "tracks">
 >;
 
+const playlistMomentPreviews = {
+  threshold: {
+    title: "Threshold room sketch",
+    src: "/audio/threshold-room-preview.wav",
+    description:
+      "An original warm-up loop built for the first stretch of the room: smoked chords, patient low end, and a little empty air."
+  },
+  pressure: {
+    title: "Pressure room sketch",
+    src: "/audio/pressure-room-preview.wav",
+    description:
+      "An original club sketch with heavier kick pressure, darker bass movement, and the sense that the floor has fully committed."
+  },
+  bridge: {
+    title: "Bridge room sketch",
+    src: "/audio/bridge-room-preview.wav",
+    description:
+      "An original transition sketch designed to connect moods without losing momentum, like the record that forgives the last left turn."
+  },
+  "lights-up": {
+    title: "Lights-up room sketch",
+    src: "/audio/lights-up-room-preview.wav",
+    description:
+      "An original closing sketch with a little more glow and emotional lift, made for the final human moment of the night."
+  }
+} satisfies Record<PlaylistMomentSlug, PlaylistMomentPreview>;
+
 const playlistTracks: readonly PlaylistTrack[] = [
+  {
+    title: "Signal Between Rooms",
+    artist: "Mira Vale",
+    length: "4:41",
+    bpm: "125 BPM",
+    lane: "Listening guide",
+    moment: "bridge",
+    vibe: "A flexible bridge cut with cool pads, patient drums, and enough lift to turn one room into the next.",
+    note:
+      "This is the route-builder: the record that can change the ceiling height without making the floor feel like it left the night.",
+    linkedPostSlug: "how-to-build-a-listening-route-through-the-night"
+  },
   {
     title: "Midnight Strobe",
     artist: "Velvet Transit",
@@ -179,6 +224,10 @@ export function getPlaylistMomentTitle(slug: PlaylistMomentSlug) {
   return playlistMomentNotes[slug].title;
 }
 
+export function getPlaylistMomentPreview(slug: PlaylistMomentSlug) {
+  return playlistMomentPreviews[slug];
+}
+
 export function getPlaylistMomentHref(slug: PlaylistMomentSlug) {
   return `/playlist/${slug}`;
 }
@@ -237,4 +286,8 @@ export function getPlaylistTracksByPostSlugs(postSlugs: readonly string[]) {
   const slugSet = new Set(postSlugs);
 
   return playlistTracks.filter((track) => slugSet.has(track.linkedPostSlug));
+}
+
+export function getPlaylistTracksByPostSlug(postSlug: string) {
+  return playlistTracks.filter((track) => track.linkedPostSlug === postSlug);
 }

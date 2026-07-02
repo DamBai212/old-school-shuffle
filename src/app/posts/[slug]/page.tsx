@@ -1,3 +1,4 @@
+import { EditorialPreviewButton } from "@/components/editorial-preview-button";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -5,7 +6,8 @@ import {
   getPlaylistHref,
   getPlaylistMomentHref,
   getPlaylistMomentTitle,
-  getPlaylistTrackByCue
+  getPlaylistTrackByCue,
+  getPlaylistTracksByPostSlug
 } from "@/content/playlist";
 import {
   getAdjacentPosts,
@@ -61,6 +63,7 @@ export default function PostPage({ params }: PostPageProps) {
   const categoryHref = getCategoryHref(post.category);
   const relatedPosts = getRelatedPosts(post.slug, 3);
   const cueTrack = getPlaylistTrackByCue(post.trackCue.title, post.trackCue.artist);
+  const matchedTracks = getPlaylistTracksByPostSlug(post.slug);
   const cueTurnTitle = cueTrack ? getPlaylistMomentTitle(cueTrack.moment) : undefined;
   const queueHref = cueTrack
     ? getPlaylistHref({
@@ -184,16 +187,36 @@ export default function PostPage({ params }: PostPageProps) {
           </section>
 
           <section className="sidebar-card">
-            <p className="section-kicker">Track cue</p>
+            <p className="section-kicker">Posted with this sound</p>
             <h2>{post.trackCue.title}</h2>
             <p className="playlist-artist">{post.trackCue.artist}</p>
             <p className="article-sidecopy">{post.trackCue.note}</p>
 
             {cueTrack ? (
-              <div className="now-stats">
-                <span>{cueTurnTitle}</span>
-                <span>{cueTrack.length}</span>
-                <span>{cueTrack.bpm}</span>
+              <>
+                <div className="now-stats">
+                  <span>{cueTurnTitle}</span>
+                  <span>{cueTrack.length}</span>
+                  <span>{cueTrack.bpm}</span>
+                </div>
+
+                <EditorialPreviewButton track={cueTrack} />
+              </>
+            ) : null}
+
+            {matchedTracks.length > 1 ? (
+              <div className="article-tracklist">
+                <p className="article-tracklist-label">Also in this post</p>
+
+                <div className="article-tracklist-items">
+                  {matchedTracks
+                    .filter((track) => track.title !== post.trackCue.title)
+                    .map((track) => (
+                      <span className="route-track" key={track.title}>
+                        {track.title}
+                      </span>
+                    ))}
+                </div>
               </div>
             ) : null}
 

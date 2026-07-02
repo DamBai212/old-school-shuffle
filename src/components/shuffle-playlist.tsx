@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { startTransition, useState } from "react";
+import { EditorialPreviewButton } from "@/components/editorial-preview-button";
 import type { PlaylistTrack } from "@/content/playlist";
 
 type ShufflePlaylistProps = {
@@ -72,6 +73,12 @@ export function ShufflePlaylist({ tracks }: ShufflePlaylistProps) {
             <span>{nowSpinning.bpm}</span>
             <span>Spin #{shuffleCount}</span>
           </div>
+
+          <EditorialPreviewButton
+            compact
+            key={`${nowSpinning.title}-${nowSpinning.artist}`}
+            track={nowSpinning}
+          />
         </div>
       </div>
 
@@ -92,7 +99,7 @@ export function ShufflePlaylist({ tracks }: ShufflePlaylistProps) {
 
       <p className="playlist-footer">
         A handpicked queue for late-night listening, built to connect the writing,
-        the mood, and the next click back into the blog.
+        the mood, the audio, and the next click back into the blog.
       </p>
     </section>
   );

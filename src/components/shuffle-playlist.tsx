@@ -8,7 +8,7 @@ type ShufflePlaylistProps = {
   tracks: readonly PlaylistTrack[];
 };
 
-function shuffleTracks(tracks: readonly PlaylistTrack[]) {
+export function shuffleTracks(tracks: readonly PlaylistTrack[]) {
   const next = [...tracks];
 
   for (let index = next.length - 1; index > 0; index -= 1) {
